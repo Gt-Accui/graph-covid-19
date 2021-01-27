@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = False
 
 # Djangoでのホスト許可（ホワイトリスト）
-ALLOWED_HOSTS = ['graph-covid-19.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
