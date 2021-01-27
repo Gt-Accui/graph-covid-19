@@ -1,5 +1,5 @@
 from plotly import graph_objects as go
-from screeninfo import get_monitors
+# from screeninfo import get_monitors
 
 
 def get_x_y_data_label(df, csvcolumns):  # X軸、Y軸のデータとラベルを取得
@@ -89,7 +89,7 @@ def bar_charts(fig, df, csvcolumns):  # 積み棒グラフ
 
 
 def default_layout(fig, trg_model):
-    height = get_monitors()[0].height - 350
+    # height = get_monitors()[0].height - 350
     fig.update_layout(
         title=trg_model.name, height=height,
         xaxis=dict(rangeslider=dict(visible=True),),  # レンジスライダー
