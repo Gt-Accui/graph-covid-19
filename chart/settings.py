@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'chart.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'name',
@@ -90,7 +90,8 @@ DATABASES = {
         'HOST': 'host',
         'PORT': '',
     }
-}
+} '''
+DATABASES['default'] = dj_database_url.config()
 
 
 # Password validation
@@ -149,5 +150,5 @@ if not DEBUG:
     import django_heroku
     django_heroku.settings(locals())
 
-db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
-DATABASES['default'].update(db_from_env)
+'''db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+DATABASES['default'].update(db_from_env)'''
