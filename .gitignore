@@ -3,3 +3,8 @@ db.sqlite3
 local_settings.py
 csv/
 migrations/
+*.pyc
+*~
+/.vscode
+myvenv
+.DS_Store
