@@ -97,6 +97,7 @@ def plot_size():  # 描画エリアのサイズ（px）を設定
 
     fore_size = get_rect(win32gui.GetForegroundWindow())  # ウィンドウ
     desk_size = get_rect(win32gui.GetDesktopWindow())  # デスクトップ
+    print(fore_size, desk_size)
     temp_size = [400, 400]  # 最小値を初期値として設定
     twk = 11  # 微調整（tweak）用
 
@@ -118,9 +119,9 @@ def plot_size():  # 描画エリアのサイズ（px）を設定
 
 
 def default_layout(fig, trg_model):
-    plotsize = plot_size()
+    # plotsize = plot_size()
     fig.update_layout(
-        title=trg_model.name, width=plotsize[0], height=plotsize[1],
+        title=trg_model.name,  # width=plotsize[0], height=plotsize[1],
         xaxis=dict(rangeslider=dict(visible=True),),  # レンジスライダー
         showlegend=True,
         margin=dict(l=50, r=50, t=50, b=50)
