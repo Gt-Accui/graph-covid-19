@@ -1,5 +1,5 @@
 from plotly import graph_objects as go
-# from win32 import win32gui
+from tkinter import Tk
 
 
 def get_x_y_data_label(df, csvcolumns):  # X軸、Y軸のデータとラベルを取得
@@ -88,40 +88,10 @@ def bar_charts(fig, df, csvcolumns):  # 積み棒グラフ
 # ↓ 共通レイアウト
 
 
-'''def plot_size():  # 描画エリアのサイズ（px）を設定
-    def get_rect(hwnd):  # 幅と高さを取得
-        rect = win32gui.GetWindowRect(hwnd)
-        w = rect[2] - rect[0]
-        h = rect[3] - rect[1]
-        return [w, h]
-
-    fore_size = get_rect(win32gui.GetForegroundWindow())  # ウィンドウ
-    desk_size = get_rect(win32gui.GetDesktopWindow())  # デスクトップ
-    print(fore_size, desk_size)
-    temp_size = [400, 400]  # 最小値を初期値として設定
-    twk = 11  # 微調整（tweak）用
-
-    for i in range(2):
-        if temp_size[i] < fore_size[i] * 0.96 - twk:
-            temp_size[i] = int(fore_size[i] * 0.96 - twk)
-            if temp_size[i] > desk_size[i] * 0.96 - twk:
-                temp_size[i] = int(desk_size[i] * 0.96 - twk)
-            if temp_size[i] > 700:
-                temp_size[i] -= i * 200
-
-    if sum(temp_size) > 800:  # 縦横比を調整
-        for i in range(2):  # タブボタン等の分、縦を短めに設定
-            if temp_size[i] > temp_size[1-i] * (1.5 + (1-i) * 0.7):
-                temp_size[i] = int(temp_size[1-i] * (1.5 + (1-i) * 0.7))
-
-    result = temp_size
-    return result'''
-
-
 def default_layout(fig, trg_model):
-    # plotsize = plot_size()
+    height = Tk().winfo_screenheight() - 350
     fig.update_layout(
-        title=trg_model.name,  # width=plotsize[0], height=plotsize[1],
+        title=trg_model.name, height=height,
         xaxis=dict(rangeslider=dict(visible=True),),  # レンジスライダー
         showlegend=True,
         margin=dict(l=50, r=50, t=50, b=50)

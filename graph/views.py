@@ -57,7 +57,6 @@ class SourceUpdateView(UpdateView):  # 更新画面
     def get_context_data(self, **kwargs):
         context = super(SourceUpdateView, self).get_context_data(**kwargs)
         source = get_object_or_404(Source, pk=self.kwargs.get('pk'))
-        # 必要性 → self.object
         context.update({
             'plot': plot(source),
             'source': source,

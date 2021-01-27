@@ -1,6 +1,5 @@
 from plotly import graph_objects as go
 import pandas as pd
-# from win32 import win32gui
 
 from .models import CSVColumn, PlotMode
 from .charts import line_charts, weekday_charts, get_sma, sma_charts
