@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = False
 
 # Djangoでのホスト許可（ホワイトリスト）
-ALLOWED_HOSTS = ['graph_covid-19.herokuapp.com']
+ALLOWED_HOSTS = ['graph-covid-19.herokuapp.com']
 
 
 # Application definition
