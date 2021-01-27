@@ -1,0 +1,23 @@
+.row{
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+ul{
+    list-style: none;
+}
+
+.longurl{
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.link{
+    color: blue;
+    white-space: normal;
+    text-align: left;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin-top: -9px;
+    background-color: whitesmoke;
+}

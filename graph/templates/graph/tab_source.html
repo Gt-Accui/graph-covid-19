@@ -1,0 +1,66 @@
+{% load crispy_forms_tags %}
+{{ form.certifications.errors }}
+<!-- 参照タブ -->
+<div class="container">
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-12">
+            <div class="float-left">
+                <h3 class="text-left">参照データ</h3>
+            </div>
+            <div class="float-right">
+                <button type="submit" class="btn btn-outline-secondary" form="source-form">保存</button>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-12">
+            <form method="POST" id="source-form" enctype="multipart/form-data">
+                {{ csvcolumns.management_form }}
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                {% for field in form %}
+                    {% if field is not form.csv %}
+                        {{ field|as_crispy_field }}
+                    {% endif %}
+                {% endfor %}
+                <div class="form-group">
+                    <label>{{ form.csv.label }}{% if form.csv.field.required %}<span class="asteriskField">*</span>{% endif %}</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            {{ form.csv }}
+                            <label class="custom-file-label" data-browse="参照">CSVのみ（ドロップ可）</label>
+                        </div>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-secondary input-group-text" id="js-Reset">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-12">
+            <div class="float-right">
+                <button type="submit" class="btn btn-outline-secondary" form="source-form">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ファイル名表示 -->
+<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+<script>
+    bsCustomFileInput.init();
+</script>
+<!-- ファイル取消処理 -->
+<script>
+  bsCustomFileInput.init();
+  document.getElementById('js-Reset').addEventListener('click', function() {
+    var elem = document.getElementById('id_csv');
+    elem.value = '';
+    elem.dispatchEvent(new Event('change'));
+  });
+</script>
+<!-- 参照タブ終わり -->

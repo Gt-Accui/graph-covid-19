@@ -1,0 +1,35 @@
+{% load crispy_forms_tags %}
+{{ form.certifications.errors }}
+<!-- 参照タブ -->
+<div class="container">
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-12">
+            <div class="float-left">
+                <h3 class="text-left">組合せ設定</h3>
+            </div>
+            <div class="float-right">
+                <button type="submit" class="btn btn-outline-secondary" form="process-form">保存</button>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-12">
+            <form method="POST" id="process-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                {{ form|crispy }}
+            </form>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-12">
+            <div class="float-right">
+                <button type="submit" class="btn btn-outline-secondary" form="process-form">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 参照タブ終わり -->

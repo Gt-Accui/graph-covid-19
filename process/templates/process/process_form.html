@@ -1,0 +1,42 @@
+{% extends "./_base.html" %}
+{% block content %}
+<main class="p-1">
+    <div id="tabs">
+        <ul class="nav nav-tabs">
+        {% if process %}
+            <li class="nav-item">
+                <a href="#plot" class="nav-link">描画</a>
+            </li>
+{% comment %}
+            <li class="nav-item">
+                <a href="#setting" class="nav-link">設定</a>
+            </li>
+{% endcomment %}
+        {% endif %}
+            <li class="nav-item">
+                <a href="#reference" class="nav-link">参照</a>
+            </li>
+        </ul>
+        {% if process %}
+        <div id="plot" class="tab-pane active p-0">
+            {% include './tab_graph.html' %}
+        </div>
+{% comment %}
+        <div id="setting" class="tab-pane active p-0">
+            {% include './tab_setting.html' %}
+        </div>
+{% endcomment %}
+        {% endif %}
+        <div id="reference" class="tab-pane active p-0">
+            {% include './tab_process.html' %}
+        </div>
+    </div>
+</main>
+
+<script>
+$(function() {
+$( "#tabs" ).tabs();
+});
+</script>
+
+{% endblock %}

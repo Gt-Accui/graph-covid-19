@@ -1,0 +1,104 @@
+<ul class="list-group">
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-3 col-md-4">
+                        <p>名称</p>
+                    </div>
+                    <div class="col-9 col-md-8">
+                        <p>{{ process.name }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-3 col-md-4">
+                        <p>処理</p>
+                    </div>
+                    <div class="col-9 col-md-8">
+                        <p>{{ process.process }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-3 col-md-4">
+                        <p>演算</p>
+                    </div>
+                    <div class="col-9 col-md-8">
+                        <p>{{ process.calc }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-3 col-md-4">
+                        <p>データ１</p>
+                    </div>
+                    <div class="col-9 col-md-8">
+                        <p>{{ process.data1 }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-3 col-md-4">
+                        <p>データ１列</p>
+                    </div>
+                    <div class="col-9 col-md-8">
+                        <p>{{ process.data1_col }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-3 col-md-4">
+                        <p>データ２</p>
+                    </div>
+                    <div class="col-9 col-md-8">
+                        <p>{{ process.data2 }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-3 col-md-4">
+                        <p>データ２列</p>
+                    </div>
+                    <div class="col-9 col-md-8">
+                        <p>{{ process.data2_col }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-3 col-md-4">
+                        <p>更新日</p>
+                    </div>
+                    <div class="col-9 col-md-8">
+                        <p>{{ process.updated_at|date:"Y-m-d G:i:s" }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-3 col-md-4">
+                        <p>登録日</p>
+                    </div>
+                    <div class="col-9 col-md-8">
+                        <p>{{ process.created_at|date:"Y-m-d G:i:s" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>

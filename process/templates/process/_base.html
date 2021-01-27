@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!-- jQuery UI -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <!-- static CSS -->
+    <link href="{% static 'process/css/process.css' %}" rel="stylesheet">
+    <title>グラコヴ19（習作）</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-info">
+        <a class="navbar-brand text-light" href="/process/">グラコヴ19（CSV組合せ）</a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber" aria-expanded="false"
+            aria-label="ナビゲーションの切替">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="Navber">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'index' %}">CSV登録</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'admin:index' %}">管理サイト</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+
+    {% if messages %}
+    <div class="messages_ul">
+        {% for message in messages %}
+        <p class="alert{% if message.tags %} alert-{{ message.tags }}{% endif %} alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block content %} 
+    {% endblock %}
+
+    <!-- Bootstrap JS https://getbootstrap.jp/ -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <!-- static JS -->
+    <script src="{% static 'process/js/plugins/responsive-paginate.js' %}"></script>
+    <script src="{% static 'process/js/process.js' %}"></script>
+</body>
+
+</html>

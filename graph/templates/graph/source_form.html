@@ -1,0 +1,38 @@
+{% extends "./_base.html" %}
+{% block content %}
+<main class="p-1">
+    <div id="tabs">
+        <ul class="nav nav-tabs">
+        {% if source %}
+            <li class="nav-item">
+                <a href="#plot" class="nav-link">描画</a>
+            </li>
+            <li class="nav-item">
+                <a href="#setting" class="nav-link">設定</a>
+            </li>
+        {% endif %}
+            <li class="nav-item">
+                <a href="#reference" class="nav-link">参照</a>
+            </li>
+        </ul>
+        {% if source %}
+        <div id="plot" class="tab-pane active p-0">
+            {% include './tab_graph.html' %}
+        </div>
+        <div id="setting" class="tab-pane active p-0">
+            {% include './tab_setting.html' %}
+        </div>
+        {% endif %}
+        <div id="reference" class="tab-pane active p-0">
+            {% include './tab_source.html' %}
+        </div>
+    </div>
+</main>
+
+<script>
+$(function() {
+$( "#tabs" ).tabs();
+});
+</script>
+
+{% endblock %}

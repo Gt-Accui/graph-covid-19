@@ -1,0 +1,7 @@
+{% load crispy_forms_tags %}
+{{ form.certifications.errors }}
+<!-- 描画タブ -->
+    <!-- グラフを描画 -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <div class="graph">{{ plot|safe }}</div>
+<!-- 描画タブ終わり -->

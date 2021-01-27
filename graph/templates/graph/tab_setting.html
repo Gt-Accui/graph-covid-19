@@ -1,0 +1,125 @@
+{% load crispy_forms_tags %}
+{{ form.certifications.errors }}
+<!-- 設定タブ -->
+<div class="container">
+    <!-- 参照データを表示 -->
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-12">
+            <form method="GET" id="source-da-form">
+                <!-- 編集不可 -->
+                <fieldset disabled>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="row form-group">
+                    {% if field is not form.url and field is not form.csv and field.value is not None %}
+                        <div class="col-2 col-md-2">
+                            {{ field.label }}
+                        </div>
+                        <div class="col-10 col-md-10">
+                            <input type="text" class="form-control" value="{{ field.value }}">
+                        </div>
+                    {% endif %}
+                    </div>
+                {% endfor %}
+                {% if form.url.value is not None %}
+                    <div class="row form-group">
+                        <div class="col-2 col-md-2"></div>
+                        <div class="col-10 col-md-10">
+                        <!-- css（color, background-color）の反映方法 -->
+                            <a class="input-group-text link" href="{{ form.url.value }}" target="blank" style="color: blue; background-color: whitesmoke">{{ form.url.value }}</a>
+                        </div>
+                    </div>
+                {% endif %}
+                    <div class="row form-group">
+                        <div class="col-2 col-md-2">
+                            {{ form.csv.label }}
+                        </div>
+                        <div class="col-10 col-md-10">
+                            <input type="text" class="form-control" value="{{ source.filename }}"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <hr/><hr/>
+    <!-- 種別フォームを表示 -->
+    <div class="row">
+        <div class="col-3 col-md-2">
+            <h3>種別</h3>
+        </div>
+        <div class="col-6 col-md-8">
+            <form method="POST" id="plotmode-form">
+            {% csrf_token %}
+                <fieldset hidden>{{ form }}</fieldset>
+                {{ plotmode|crispy }}
+            </form>
+        </div>
+        <div class="col-3 col-md-2">
+            <div class="float-right">
+                <button type="submit" class="btn btn-outline-secondary" form="plotmode-form">保存</button>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <hr/>
+    <!-- 軸の設定フォームを表示 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="float-left">
+                <h3 class="text-left">軸の設定</h3>
+            </div>
+            <div class="float-right">
+                <button type="submit" class="btn btn-outline-secondary" form="csvcolumns-form">保存</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <form method="POST" id="csvcolumns-form">
+            {% csrf_token %}
+                <fieldset hidden>{{ form }}</fieldset>
+                {{ csvcolumns.management_form }}
+                {{ csvcolumns.non_field_errors }}
+            {% for csvcolform in csvcolumns %}
+                <hr/>
+                <!-- CSVでの列番号とラベル（読取のみ） -->
+                <fieldset readonly>
+                    <div class="row form-group">
+                        <div class="col-2 col-md-2" style="text-align: center;">
+                            <fieldset hidden>{{ csvcolform.csv_col_num }}</fieldset>
+                            <h4>{{ csvcolform.csv_col_num.value|add:"1" }}</h4>
+                        </div>
+                        <div class="col-10 col-md-10">
+                            {{ csvcolform.csv_col_label|as_crispy_field }}
+                        </div>
+                    </div>
+                </fieldset>
+                <!-- 軸、グラフでのラベル -->
+                <div class="row">
+                    <div class="col-3 col-md-2">
+                        <div style="float: right; text-align: left;">
+                            {{ csvcolform.axis|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="col-9 col-md-10">
+                        {{ csvcolform.df_col_label|as_crispy_field }}
+                        {{ csvcolform.errors }}
+                    </div>
+                </div>
+                <!-- 非表示フィールド（form.id）の取り出し -->
+                {{ csvcolform.id }}
+            {% endfor %}
+                <hr/>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="float-right">
+                <button type="submit" class="btn btn-outline-secondary" form="csvcolumns-form">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 設定タブ終わり -->
