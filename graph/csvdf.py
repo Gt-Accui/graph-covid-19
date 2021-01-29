@@ -1,7 +1,8 @@
 import pandas as pd
 from django.db.models import Q
+import io
 
-from .models import CSVColumn
+from .models import CSVColumn, CSVData
 
 
 # ↓ 'CSV登録'で使用
@@ -44,7 +45,8 @@ def csv_to_df(data_col, err_list):
         return pd.DataFrame  # X軸が1つ以外なら空のDFを返す
     data_y_csv = data_col.csv_col_label
 
-    data_csv = pd.read_csv(data_source.csv, encoding='UTF8',)[
+    csv_str = CSVData.objects.get(source=data_source).csv_str
+    data_csv = pd.read_csv(io.StringIO(csv_str))[
         [data_x_csv, data_y_csv]]
 
     data_csvcolumns = CSVColumn.objects.filter(

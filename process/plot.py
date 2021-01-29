@@ -13,6 +13,7 @@ def df_calc(fig, df1, df2, process):
     calc_dic = {'add': df1.add, 'sub': df1.sub, 'mul': df1.mul, 'div': df1.div}
     df_list = list()
     if calc:
+        df2.columns = df1.columns
         df_list.append(calc_dic[calc](df2))
     else:
         df_list.extend([df1, df2])

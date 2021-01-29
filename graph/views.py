@@ -4,32 +4,42 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from django.contrib import messages
 import pandas as pd
+import io
 
-from .models import Source, CSVColumn, PlotMode
+from .models import Source, CSVColumn, CSVData, PlotMode
 from .forms import SourceForm, CSVColumnFormset, PlotModeFormset
 from .plot import plot
 from .filters import SourceFilter
 
 
+def csv_str(source):
+    try: CSVData.objects.filter(source=source).delete()
+    except Exception as e_csv_update: print(e_csv_update)
+
+    with source.csv.open() as csv:
+        csv_str = ''
+        for line in csv: csv_str += line.decode(encoding='UTF8')
+        csv.close()
+    CSVData(source=source, csv_str=csv_str).save()
+
+
 def csv_col_def(source):  # CSVの列ラベルをテーブル'CSVColumn'に保存
-    csv = pd.read_csv(
-        source.csv, encoding='UTF8',
-        parse_dates=[0],)  # parse_dates=True は無効か
-    columns = list(csv.columns)
+    csv_str = CSVData.objects.get(source=source).csv_str
+    df = pd.read_csv(io.StringIO(csv_str))  # , encoding='UTF8',)
+    columns = list(df.columns)
+
+    try: CSVColumn.objects.filter(source=source).delete()
+    except Exception as e_csv_col_update: print(e_csv_col_update)
 
     for column in columns:  # 数値はY軸、その他はX軸をデフォルトとする
         col_num = columns.index(column)
         axis = 'Y'
-        try:
-            csv.iloc[[0], [col_num]].values[0] / 1  # 日付はエラーと判定される
-        except Exception as e_csv_col_value:
-            print(e_csv_col_value)
-            axis = 'X'
+        try: df.iloc[[0], [col_num]].values[0] / 1  # 日付はエラーと判定される
+        except Exception: axis = 'X'
 
         CSVColumn(
             source=source, csv_col_num=col_num, csv_col_label=column,
-            df_col_label=column, axis=axis
-        ).save()
+            df_col_label=column, axis=axis).save()
 
 
 class SourceCreateView(CreateView):  # 登録画面
@@ -41,6 +51,7 @@ class SourceCreateView(CreateView):  # 登録画面
 
     def form_valid(self, form):
         self.object = form.save()
+        csv_str(self.object)
         csv_col_def(self.object)
         PlotMode(source=self.object, mode='lines').save()  # 折れ線をデフォルトに
         messages.info(self.request, f'{self.object.name}を保存しました。')
@@ -62,12 +73,10 @@ class SourceUpdateView(UpdateView):  # 更新画面
             'source': source,
             'csvcolumns': CSVColumnFormset(
                 self.request.POST or None, instance=source,
-                prefix='csvcolumns',
-            ),
+                prefix='csvcolumns',),
             'plotmode': PlotModeFormset(
                 self.request.POST or None, instance=source,
-                prefix='plotmode',
-            ),
+                prefix='plotmode',),
         })
         return context
 
@@ -82,8 +91,7 @@ class SourceUpdateView(UpdateView):  # 更新画面
                 messages.info(
                     self.request, f'{self.object.name}の軸の設定を保存しました。')
                 return redirect(self.get_success_url())
-        except Exception as e_formset_col:
-            print('e_formset_col', e_formset_col)
+        except Exception as e_formset_c: print('e_formset_col', e_formset_c)
 
         try:
             if form_plot.is_valid():
@@ -91,19 +99,22 @@ class SourceUpdateView(UpdateView):  # 更新画面
                 messages.info(
                     self.request, f'{self.object.name}のグラフ種別を保存しました。')
                 return redirect(self.get_success_url())
-        except Exception as e_form_plot:
-            print('e_form_plot', e_form_plot)
+        except Exception as e_form_plot: print('e_form_plot', e_form_plot)
 
         if form.is_valid():
             self.object = form.save()  # commit=False)  # ← 必要性
+            source = Source.objects.get(pk=self.object.id)
+            try:
+                print(source.csv.size)
+                csv_str(self.object)
+                csv_col_def(self.object)
+            except Exception as e_csv_exist: print(e_csv_exist)
             messages.info(
                 self.request, f'{self.object.name}を保存しました。')
             return redirect(self.get_success_url())
-
         else:
             print('Not Valid!')
-            for ele in form:
-                print(ele)
+            for ele in form: print(ele)
             return self.render_to_response(context)
 
 

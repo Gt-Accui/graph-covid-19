@@ -1,7 +1,8 @@
 from plotly import graph_objects as go
 import pandas as pd
+import io
 
-from .models import CSVColumn, PlotMode
+from .models import CSVColumn, CSVData, PlotMode
 from .charts import line_charts, weekday_charts, get_sma, sma_charts
 from .charts import bar_charts, default_layout
 from .csvdf import get_df_labels
@@ -38,7 +39,8 @@ def plot(source):
     default_layout(fig, source)
 
     csvcolumns = CSVColumn.objects.filter(source=source)
-    df = pd.read_csv(source.csv, encoding='UTF8',)
+    csv_str = CSVData.objects.get(source=source).csv_str
+    df = pd.read_csv(io.StringIO(csv_str))  # , encoding='UTF8',)
     df.columns = get_df_labels(csvcolumns, df)
     set_mode(fig, df, csvcolumns, source)
 

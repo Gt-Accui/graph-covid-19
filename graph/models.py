@@ -68,6 +68,22 @@ class CSVColumn(models.Model):
         verbose_name_plural = 'CSVからDFへの変換設定'
 
 
+class CSVData(models.Model):
+    source = models.ForeignKey(
+        verbose_name='対象CSV', to=Source, on_delete=models.CASCADE,
+        editable=False,)
+    csv_str = models.TextField(
+        verbose_name='CSVデータ', blank=True, null=True,)
+
+    # 以下は管理サイト上の表示設定
+    def __str__(self):
+        return f'{self.source}'
+
+    class Meta:
+        verbose_name = 'CSVデータ'
+        verbose_name_plural = 'CSVデータ'
+
+
 class PlotMode(models.Model):
     source = models.ForeignKey(
         verbose_name='対象CSV', to=Source, on_delete=models.CASCADE,

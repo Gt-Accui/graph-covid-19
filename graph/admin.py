@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Source, CSVColumn, PlotMode
+from .models import Source, CSVColumn, CSVData, PlotMode
 
 
 @admin.register(Source)
@@ -9,6 +9,11 @@ class SourceAdmin(admin.ModelAdmin):
 
 @admin.register(CSVColumn)
 class CSVColumnAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(CSVData)
+class CSVDataAdmin(admin.ModelAdmin):
     pass
 
 
