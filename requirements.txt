@@ -27,7 +27,6 @@ pandas==1.1.5
 Pillow==8.1.0
 plotly==4.14.1
 psycopg2==2.8.6
-PyAutoGUI==0.9.52
 pycodestyle==2.6.0
 pyflakes==2.2.0
 PyGetWindow==0.0.9

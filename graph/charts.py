@@ -1,5 +1,4 @@
 from plotly import graph_objects as go
-import pyautogui
 
 
 def get_x_y_data_label(df, csvcolumns):  # X軸、Y軸のデータとラベルを取得
@@ -89,9 +88,9 @@ def bar_charts(fig, df, csvcolumns):  # 積み棒グラフ
 
 
 def default_layout(fig, trg_model):
-    height = pyautogui.size().height - 350
+    # height = pyautogui.size().height - 350
     fig.update_layout(
-        title=trg_model.name, height=height,
+        title=trg_model.name,  # height=height,
         xaxis=dict(rangeslider=dict(visible=True),),  # レンジスライダー
         showlegend=True,
         margin=dict(l=50, r=50, t=50, b=50)
