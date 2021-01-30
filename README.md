@@ -47,14 +47,14 @@ zipp==3.4.0
 - Press the "新規"( : "New") button at the top right of the index page. (Then the 'create' page opens.)
 - Enter in each field. ("名称" : "Name" , "出典" : "Source")
 - Select a CSV file. (You can drag and drop.)
-- Press the button "保存"( : "Save") at the bottom right of the page.  
+- Press the button "保存"( : "Save") at the bottom right of the page.
 
 The chart(s) will then be plotted if possible. 
 ## 2. Change chart(s) settings
 - Press the tab button "設定" ( : Settings) at the top left of the page.
 - Change the value of any field.  
 ("種別" : "Type" , "折れ線グラフ" : "Line chart(s)" , "積み棒グラフ" : "Stacking bar chart(s)" , "軸" : "Axis" , "表示名" : "Display name")
-- Press the button "保存"( : "save") at the bottom right of the page.  
+- Press the corresponding button "保存"( : "save").
 
 The settings will be reflected.
 # Note
