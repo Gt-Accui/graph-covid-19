@@ -20,6 +20,26 @@ At this time, assign a numerical value to the Y-axis and other values to the X-a
 By the way, the name is not "chart-covid-19" because the word "gra-cov" has a good feeling  
 ... and the glyphs of **"g" and "9" are similar**.
 
+# Usage
+## 1. CSV file registration
+- Press the "新規"( : "New") button at the top right of the index page. (Then the 'create' page opens.)
+- Enter in each field. ("名称" : "Name" , "出典" : "Source")
+- Select a CSV file. (You can drag and drop.)
+- Press the button "保存"( : "Save") at the bottom right of the page.
+
+The chart(s) will then be plotted if possible. 
+## 2. Change chart(s) settings
+- Press the tab button "設定" ( : Settings) at the top left of the page.
+- Change the value of any field.  
+("種別" : "Type" , "折れ線グラフ" : "Line chart(s)" , "積み棒グラフ" : "Stacking bar chart(s)" , "軸" : "Axis" , "表示名" : "Display name")
+- Press the corresponding button "保存"( : "save").
+
+The settings will be reflected.
+# Note
+The main target is open data released by the Japanese Ministry of Health, Labor and Welfare.  
+https://www.mhlw.go.jp/stf/covid-19/open-data.html  
+For example, the CSV file is "UTF-8" encoded, contains headers, and has a date as the Key.
+
 # Requirement
 asgiref 3.3.1
 python 3.9.1  
@@ -41,26 +61,6 @@ soupsieve 2.1
 sqlparse 0.4.1  
 whitenoise 5.2.0  
 zipp 3.4.0
-
-# Usage
-## 1. CSV file registration
-- Press the "新規"( : "New") button at the top right of the index page. (Then the 'create' page opens.)
-- Enter in each field. ("名称" : "Name" , "出典" : "Source")
-- Select a CSV file. (You can drag and drop.)
-- Press the button "保存"( : "Save") at the bottom right of the page.
-
-The chart(s) will then be plotted if possible. 
-## 2. Change chart(s) settings
-- Press the tab button "設定" ( : Settings) at the top left of the page.
-- Change the value of any field.  
-("種別" : "Type" , "折れ線グラフ" : "Line chart(s)" , "積み棒グラフ" : "Stacking bar chart(s)" , "軸" : "Axis" , "表示名" : "Display name")
-- Press the corresponding button "保存"( : "save").
-
-The settings will be reflected.
-# Note
-The main target is open data released by the Japanese Ministry of Health, Labor and Welfare.  
-https://www.mhlw.go.jp/stf/covid-19/open-data.html  
-For example, the CSV file is "UTF-8" encoded, contains headers, and has a date as the Key.
 
 # License
 "gra-cov-19" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
