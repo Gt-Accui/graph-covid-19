@@ -40,7 +40,7 @@ six 1.15.0
 soupsieve 2.1  
 sqlparse 0.4.1  
 whitenoise 5.2.0  
-zipp==3.4.0
+zipp 3.4.0
 
 # Usage
 ## 1. CSV file registration
