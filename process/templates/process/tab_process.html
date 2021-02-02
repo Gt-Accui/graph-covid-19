@@ -16,9 +16,23 @@
     <div class="row">
         <div class="col-12">
             <form method="POST" id="process-form" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.non_field_errors }}
-                {{ form|crispy }}
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                {% if "処理" in field.label %}
+                <div class="col-12">
+                    <div class="col-6 float-left">
+                        {{ field|as_crispy_field }}
+                    </div>
+                {% elif "間隔" in field.label %}
+                    <div class="col-6 float-right">
+                        {{ field|as_crispy_field }}
+                    </div>
+                </div>
+                {% else %}
+                    {{ field|as_crispy_field }}
+                {% endif %}
+            {% endfor %}
             </form>
         </div>
     </div>

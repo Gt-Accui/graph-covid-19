@@ -18,6 +18,21 @@ class Process(models.Model):
         verbose_name='データ２', to=CSVColumn, on_delete=models.CASCADE,
         related_name='data2_col',
     )
+
+    process_list = (
+        ('shift', '差分'), ('pct_change', '変化率'),
+    )
+    data1_process = models.CharField(
+        verbose_name='データ１の処理', choices=process_list,
+        max_length=100, blank=True, null=True, default='')
+    data1_periods = models.SmallIntegerField(
+        verbose_name='データ１の処理間隔', default=0)
+    data2_process = models.CharField(
+        verbose_name='データ２の処理', choices=process_list,
+        max_length=100, blank=True, null=True, default='')
+    data2_periods = models.SmallIntegerField(
+        verbose_name='データ２の処理間隔', default=0)
+
     calc_list = (
         ('add', 'たし算： データ１ + データ２'), ('sub', 'ひき算： データ１ − データ２'),
         ('mul', 'かけ算： データ１ × データ２'), ('div', 'わり算： データ１ ÷ データ２'),
@@ -25,6 +40,7 @@ class Process(models.Model):
     calc = models.CharField(
         verbose_name='データ１、２の演算', choices=calc_list,
         max_length=100, blank=True, null=True, default='')
+
     weekday = models.BooleanField(
         verbose_name='曜日ごと(移動平均無効)', default=False)
     sma_num = models.PositiveSmallIntegerField(

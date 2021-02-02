@@ -59,6 +59,22 @@ def csv_to_df(data_col, err_list):
     return data_df
 
 
+def df_process(df, process, periods):
+    if process and periods:
+        try:  # index が日付のとき
+            periods_str = f'{periods}D'
+            if process == 'shift': return df - df.shift(freq=periods_str)
+            elif process == 'pct_change': return df.pct_change(freq=periods_str)
+            else: return df
+        except Exception as e_df_process:
+            print(e_df_process)
+            if process == 'shift': return df.diff(periods)
+            elif process == 'pct_change': return df.pct_change(periods)
+            else: return df
+    else:
+        return df
+
+
 def get_csvcolumns(process):
     data_source = process.data1_col.source
     data1_col = process.data1_col
