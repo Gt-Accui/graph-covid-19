@@ -13,14 +13,15 @@ from .filters import SourceFilter
 
 
 def csv_str(source):
-    try: CSVData.objects.filter(source=source).delete()
-    except Exception as e_csv_update: print(e_csv_update)
-
-    with source.csv.open() as csv:
+    with source.csv.open() as csv:  # csvを列ごとに取り出し、文字列として結合
         csv_str = ''
         for line in csv: csv_str += line.decode(encoding='UTF8')
         csv.close()
-    CSVData(source=source, csv_str=csv_str).save()
+
+    CSVData.objects.update_or_create(
+        source=source,
+        defaults={'csv_str': csv_str},
+    )
 
 
 def csv_col_def(source):  # CSVの列ラベルをテーブル'CSVColumn'に保存
@@ -28,18 +29,16 @@ def csv_col_def(source):  # CSVの列ラベルをテーブル'CSVColumn'に保�
     df = pd.read_csv(io.StringIO(csv_str))  # , encoding='UTF8',)
     columns = list(df.columns)
 
-    try: CSVColumn.objects.filter(source=source).delete()
-    except Exception as e_csv_col_update: print(e_csv_col_update)
-
     for column in columns:  # 数値はY軸、その他はX軸をデフォルトとする
         col_num = columns.index(column)
         axis = 'Y'
         try: df.iloc[[0], [col_num]].values[0] / 1  # 日付はエラーと判定される
         except Exception: axis = 'X'
 
-        CSVColumn(
+        CSVColumn.objects.update_or_create(
             source=source, csv_col_num=col_num, csv_col_label=column,
-            df_col_label=column, axis=axis).save()
+            defaults={'df_col_label': column, 'axis': axis},
+            )
 
 
 class SourceCreateView(CreateView):  # 登録画面
