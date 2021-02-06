@@ -22,17 +22,16 @@ By the way, the name is not "chart-covid-19" because the word "gra-cov" has a go
 
 # Usage
 ## 1. CSV file registration
-- Press the "新規"( : "New") button at the top right of the index page. (Then the 'create' page opens.)
-- Enter in each field. ("名称" : "Name" , "出典" : "Source")
+- Press the button "New" at the top right of the index page. (Then the 'create' page opens.)
+- Enter in each field.
 - Select a CSV file. (You can drag and drop.)
-- Press the button "保存"( : "Save") at the bottom right of the page.
+- Press the button "Save" at the bottom right of the page.
 
 The chart(s) will then be plotted if possible. 
 ## 2. Change chart(s) settings
-- Press the tab button "設定" ( : Settings) at the top left of the page.
+- Press the tab button "Settings" at the top left of the page.
 - Change the value of any field.  
-("種別" : "Type" , "折れ線グラフ" : "Line chart(s)" , "積み棒グラフ" : "Stacking bar chart(s)" , "軸" : "Axis" , "表示名" : "Display name")
-- Press the corresponding button "保存"( : "save").
+- Press the corresponding button "save".
 
 The settings will be reflected.
 # Note
