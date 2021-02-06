@@ -22,16 +22,22 @@ By the way, the name is not "chart-covid-19" because the word "gra-cov" has a go
 
 # Usage
 ## 1. CSV file registration
-- Press the button "New" at the top right of the index page. (Then the 'create' page opens.)
+- Press the button "Create" at the top right of the index page. (Then the 'create' page opens.)
+
+![index](https://user-images.githubusercontent.com/63509152/107122627-2bb04c00-68dc-11eb-84ed-c8bb3ef84aa6.png)
+
 - Enter in each field.
 - Select a CSV file. (You can drag and drop.)
 - Press the button "Save" at the bottom right of the page.
+
+![create](https://user-images.githubusercontent.com/63509152/107122629-2c48e280-68dc-11eb-805c-8b13f91e0761.png)
 
 The chart(s) will then be plotted if possible. 
 ## 2. Change chart(s) settings
 - Press the tab button "Settings" at the top left of the page.
 - Change the value of any field.  
 - Press the corresponding button "save".
+![settings](https://user-images.githubusercontent.com/63509152/107122630-2ce17900-68dc-11eb-833d-3388615e5a2d.png)
 
 The settings will be reflected.
 # Note
