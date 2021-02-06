@@ -28,7 +28,7 @@ By the way, the name is not "chart-covid-19" because the word "gra-cov" has a go
 
 - Enter in each field.
 - Select a CSV file. (You can drag and drop.)
-- Press the button "Save" at the bottom right of the page.
+- Press the button "Save" at the top (or bottom) right of the page.
 
 ![create](https://user-images.githubusercontent.com/63509152/107122629-2c48e280-68dc-11eb-805c-8b13f91e0761.png)
 
@@ -37,6 +37,7 @@ The chart(s) will then be plotted if possible.
 - Press the tab button "Settings" at the top left of the page.
 - Change the value of any field.  
 - Press the corresponding button "save".
+
 ![settings](https://user-images.githubusercontent.com/63509152/107122630-2ce17900-68dc-11eb-833d-3388615e5a2d.png)
 
 The settings will be reflected.
