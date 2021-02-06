@@ -9,7 +9,7 @@
 I'm sorry.  I am a Japanese who is **not very good at English**.  
 So this README may be a little difficult to read ~~because it is written using google translate~~.
 
-Also, "グラコヴ19"( : "gra-cov-19") is the app **made in practice**.  
+Also, "gra-cov-19" is the app **made in practice**.  
 **Enjoy** if it behaves unexpectedly.
 
 # Features
