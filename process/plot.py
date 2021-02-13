@@ -11,7 +11,7 @@ def df_calc(fig, df1, df2, process):
     calc = process.calc
     calc_dic = {'add': df1.add, 'sub': df1.sub, 'mul': df1.mul, 'div': df1.div}
     df_list = list()
-    if calc:
+    if calc and 'axis' not in calc:
         df2.columns = df1.columns
         df_list.append(calc_dic[calc](df2))
     else:
@@ -21,30 +21,41 @@ def df_calc(fig, df1, df2, process):
 
 def update_y_title(fig, process):
     calc = process.calc
-    symbol_dic = {'add': '+', 'sub': '-', 'mul': '×', 'div': '÷', None: ' '}
-    calc_symbol = symbol_dic[calc]
-    fig.update_layout(yaxis=dict(
-        title=f'{process.data1_col} {calc_symbol} {process.data2_col}',
-    ),)
+    if calc and 'axis' not in calc:
+        symbol_dic = {'add': '+', 'sub': '-', 'mul': '×', 'div': '÷', None: ' '}
+        calc_symbol = symbol_dic[calc]
+        fig.update_layout(yaxis=dict(
+            title=f'{process.data1_col}<br>{calc_symbol}  {process.data2_col}',
+        ),)
+    else:
+        fig.update_layout(
+            yaxis=dict(showgrid=False),
+            yaxis2=dict(showgrid=False),
+        )
 
 
 def set_mode(fig, df1, df2, process):
     csvcolumns = get_csvcolumns(process)
+    y_axis = 'y1'
+    calc = process.calc
     if process.weekday:  # 曜日ごと
         df_list = df_calc(fig, df1, df2, process)
         for df in df_list:
-            weekday_charts(fig, df.reset_index(), csvcolumns)
+            weekday_charts(fig, df.reset_index(), csvcolumns, y_axis)
+            if calc == '2-axis': y_axis = 'y2'  # ２軸のとき df2 を右の軸に
     elif process.sma_num:  # 単純移動平均
         window = process.sma_num
         df1_sma = get_sma(df1, csvcolumns, window)
         df2_sma = get_sma(df2, csvcolumns, window)
         df_list = df_calc(fig, df1_sma, df2_sma, process)
         for df in df_list:
-            sma_charts(fig, df.reset_index(), csvcolumns, window)
+            sma_charts(fig, df.reset_index(), csvcolumns, y_axis, window)
+            if calc == '2-axis': y_axis = 'y2'
     else:
         df_list = df_calc(fig, df1, df2, process)
         for df in df_list:
-            line_charts(fig, df.reset_index(), csvcolumns)
+            line_charts(fig, df.reset_index(), csvcolumns, y_axis)
+            if calc == '2-axis': y_axis = 'y2'
     update_y_title(fig, process)
 
 

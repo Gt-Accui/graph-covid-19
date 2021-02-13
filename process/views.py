@@ -73,8 +73,7 @@ class ProcessFilterView(FilterView):
 
         try:
             return super().get(request, **kwargs)
-        except Exception as e_session:
-            print(e_session)
+        except Exception:
             request.GET['page'] = ''
             return super().get(request, **kwargs)
 

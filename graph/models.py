@@ -23,11 +23,10 @@ class Source(models.Model):
 
     def save(self, *args, **kwargs):  # 既存CSVがあれば削除後に新規保存
         try:
-            this = Source.objects.get(id=self.id)
-            if this.csv != self.csv:
-                this.csv.delete(save=False)
-        except Exception:
-            pass
+            old = Source.objects.get(id=self.id)
+            if old.csv != self.csv:
+                old.csv.delete(save=False)
+        except Exception: pass
         super(Source, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -61,7 +60,7 @@ class CSVColumn(models.Model):
 
     # 以下は管理サイト上の表示設定
     def __str__(self):
-        return f'{self.source} - {self.csv_col_num} {self.csv_col_label}'
+        return f'{self.source} - {self.df_col_label}'
 
     class Meta:
         verbose_name = 'CSVからDFへの変換設定'

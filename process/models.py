@@ -34,12 +34,13 @@ class Process(models.Model):
         verbose_name='データ２の処理間隔', default=0)
 
     calc_list = (
+        ('1-axis', 'なし（１軸）'), ('2-axis', 'なし（２軸）'),
         ('add', 'たし算： データ１ + データ２'), ('sub', 'ひき算： データ１ − データ２'),
         ('mul', 'かけ算： データ１ × データ２'), ('div', 'わり算： データ１ ÷ データ２'),
     )
     calc = models.CharField(
         verbose_name='データ１、２の演算', choices=calc_list,
-        max_length=100, blank=True, null=True, default='')
+        max_length=100, default='1-axis')
 
     weekday = models.BooleanField(
         verbose_name='曜日ごと(移動平均無効)', default=False)

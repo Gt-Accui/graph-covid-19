@@ -90,7 +90,7 @@ class SourceUpdateView(UpdateView):  # 更新画面
                 messages.info(
                     self.request, f'{self.object.name}の軸の設定を保存しました。')
                 return redirect(self.get_success_url())
-        except Exception as e_formset_c: print('e_formset_col', e_formset_c)
+        except Exception: pass
 
         try:
             if form_plot.is_valid():
@@ -98,7 +98,7 @@ class SourceUpdateView(UpdateView):  # 更新画面
                 messages.info(
                     self.request, f'{self.object.name}のグラフ種別を保存しました。')
                 return redirect(self.get_success_url())
-        except Exception as e_form_plot: print('e_form_plot', e_form_plot)
+        except Exception: pass
 
         if form.is_valid():
             self.object = form.save()  # commit=False)  # ← 必要性
@@ -107,7 +107,7 @@ class SourceUpdateView(UpdateView):  # 更新画面
                 print(source.csv.size)
                 csv_str(self.object)
                 csv_col_def(self.object)
-            except Exception as e_csv_exist: print(e_csv_exist)
+            except Exception: pass
             messages.info(
                 self.request, f'{self.object.name}を保存しました。')
             return redirect(self.get_success_url())
@@ -136,8 +136,7 @@ class SourceFilterView(FilterView):
 
         try:
             return super().get(request, **kwargs)
-        except Exception as e_session:
-            print(e_session)
+        except Exception:
             request.GET['page'] = ''
             return super().get(request, **kwargs)
 

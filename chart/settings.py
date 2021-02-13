@@ -140,8 +140,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # 本番環境との切り分け
 try:
     from .local_settings import *
-except ImportError:
-    pass
+except ImportError: pass
 
 if not DEBUG:
     SECRET_KEY = os.environ['SECRET_KEY']

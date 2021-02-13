@@ -16,8 +16,7 @@ def get_df_labels(csvcolumns, csv):
         except Exception:  # エラーなら
             try:  # 日時に変換、上書きしてみるテスト ← try tryの目的
                 csv[csv_col_label] = pd.to_datetime(csv[csv_col_label])
-            except Exception:
-                pass
+            except Exception: pass
         df_labels.append(csvcolumn.df_col_label)
 
     return df_labels
@@ -31,8 +30,7 @@ def get_x_label(data_source, err_list):
         csvcolumn_x = CSVColumn.objects.get(source=data_source, axis='X')
         data_x_csv = csvcolumn_x.csv_col_label
         data_x_df = csvcolumn_x.df_col_label
-    except Exception as e_data1_x:
-        print('e_data1_x', e_data1_x)
+    except Exception:
         err_list.append(f'CSV登録で、{data_source}のX軸を1つだけ設定してください。')
         return '', ''
     return data_x_csv, data_x_df
@@ -66,8 +64,7 @@ def df_process(df, process, periods):
             if process == 'shift': return df - df.shift(freq=periods_str)
             elif process == 'pct_change': return df.pct_change(freq=periods_str)
             else: return df
-        except Exception as e_df_process:
-            print(e_df_process)
+        except Exception:
             if process == 'shift': return df.diff(periods)
             elif process == 'pct_change': return df.pct_change(periods)
             else: return df

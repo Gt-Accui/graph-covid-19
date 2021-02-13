@@ -11,22 +11,22 @@ from .csvdf import get_df_labels
 def set_mode(fig, df, csvcolumns, source):
     x_len = len(csvcolumns.filter(axis='X'))
     y_len = len(csvcolumns.filter(axis='Y'))
+    y_axis = 'y'
     if x_len == 1 and y_len > 0:  # グラフの種類ごとで変えるか
-        plotmode = PlotMode.objects.get(source=source)
-        if plotmode.mode == 'lines':
+        mode = PlotMode.objects.get(source=source).mode
+        if mode == 'lines':
             if y_len == 1:  # 折れ線グラフでY軸が１つのとき
                 try:  # X軸が日付なら'曜日ごと'と'７日平均'をplot
-                    weekday_charts(fig, df, csvcolumns)
+                    weekday_charts(fig, df, csvcolumns, y_axis)
                     window = 7
-                    df_sma = get_sma(df, csvcolumns, window)
-                    sma_charts(fig, df_sma.reset_index(), csvcolumns, window)
-                except Exception as e_filter_dayname:
-                    print('e_filter_dayname', e_filter_dayname)
-                    line_charts(fig, df, csvcolumns)
+                    df_sma = get_sma(df, csvcolumns, window).reset_index()
+                    sma_charts(fig, df_sma, csvcolumns, y_axis, window)
+                except Exception:
+                    line_charts(fig, df, csvcolumns, y_axis)
             else:
-                line_charts(fig, df, csvcolumns)
-        elif plotmode.mode == 'bars':
-            bar_charts(fig, df, csvcolumns)
+                line_charts(fig, df, csvcolumns, y_axis)
+        elif mode == 'bars':
+            bar_charts(fig, df, csvcolumns, y_axis)
     else:
         if x_len != 1:
             fig.update_layout(xaxis=dict(title='X軸は1つだけ選択してください。',))
