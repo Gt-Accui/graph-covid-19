@@ -1,9 +1,12 @@
-from plotly import graph_objects as go
+import plotly.graph_objects as go
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 import sys
 sys.path.append('../')
 from graph.charts import line_charts, weekday_charts, get_sma, sma_charts
-from graph.charts import default_layout
+from graph.charts import default_layout, image_default
 from graph.csvdf import csv_to_df, df_process, get_csvcolumns
 
 
@@ -22,11 +25,12 @@ def df_calc(fig, df1, df2, process):
 def update_y_title(fig, process):
     calc = process.calc
     if calc and 'axis' not in calc:
-        symbol_dic = {'add': '+', 'sub': '-', 'mul': '×', 'div': '÷', None: ' '}
+        symbol_dic = {
+            'add': '+', 'sub': '-', 'mul': '×', 'div': '÷', None: ' '}
         calc_symbol = symbol_dic[calc]
-        fig.update_layout(yaxis=dict(
-            title=f'{process.data1_col}<br>{calc_symbol}  {process.data2_col}',
-        ),)
+        fig.update_layout(
+            yaxis=dict(title=f'{process.data1_col}<br>{calc_symbol}  {process.data2_col}'),
+            showlegend=False)
     else:
         fig.update_layout(
             yaxis=dict(showgrid=False),
@@ -76,3 +80,25 @@ def plot(process):
     set_mode(fig, df1, df2, process)
 
     return fig.to_html(include_plotlyjs=False)
+
+
+def plot_image(process):
+    fig = go.Figure()
+
+    err_list = list()
+    df1 = csv_to_df(process.data1_col, err_list)
+    df2 = csv_to_df(process.data2_col, err_list)
+    if len(err_list) > 0:
+        fig.update_layout(xaxis=dict(title=' '.join(err_list),))
+        return fig.to_html(include_plotlyjs=False)
+    df1 = df_process(df1, process.data1_process, process.data1_periods)
+    df2 = df_process(df2, process.data2_process, process.data2_periods)
+
+    set_mode(fig, df1, df2, process)
+    image_default(fig, process)
+
+    image_name = './process/static/process/image/' + process.name + '.svg'
+    fig.write_image(image_name, scale=0.5, engine='kaleido')
+    res = cloudinary.uploader.upload(
+        open(image_name, 'rb'), public_id=process.name)
+    return res['secure_url']

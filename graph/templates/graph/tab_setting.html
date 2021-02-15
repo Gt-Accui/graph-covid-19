@@ -26,13 +26,13 @@
                         <div class="col-2 col-md-2"></div>
                         <div class="col-10 col-md-10">
                         <!-- css（color, background-color）の反映方法 -->
-                            <a class="input-group-text link" href="{{ form.url.value }}" target="blank" style="color: blue; background-color: whitesmoke">{{ form.url.value }}</a>
+                            <a class="input-group-text longurl link" href="{{ form.url.value }}" target="blank" style="color: blue; background-color: whitesmoke">{{ form.url.value }}</a>
                         </div>
                     </div>
                 {% endif %}
                     <div class="row form-group">
                         <div class="col-2 col-md-2">
-                            {{ form.csv.label }}
+                            {{ source.csv.label }}
                         </div>
                         <div class="col-10 col-md-10">
                             <input type="text" class="form-control" value="{{ source.filename }}"/>

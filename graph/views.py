@@ -6,27 +6,41 @@ from django.contrib import messages
 import pandas as pd
 import io
 
-from .models import Source, CSVColumn, CSVData, PlotMode
+from .models import Source, CSVColumn, CSVData, Image, PlotMode
 from .forms import SourceForm, CSVColumnFormset, PlotModeFormset
-from .plot import plot
+from .plot import plot, plot_image
 from .filters import SourceFilter
 
 
-def csv_str(source):
-    with source.csv.open() as csv:  # csvを列ごとに取り出し、文字列として結合
+def update_csv(pk, csv):
+    Source.objects.update_or_create(
+        pk=pk,
+        defaults={'csv': csv.name},)
+
+
+def csv_str(source, csv):
+    with csv.open() as csv:  # csvを列ごとに取り出し、文字列として結合
         csv_str = ''
         for line in csv: csv_str += line.decode(encoding='UTF8')
         csv.close()
 
     CSVData.objects.update_or_create(
         source=source,
-        defaults={'csv_str': csv_str},
+        defaults={'csv_str': csv_str},)
+
+
+def up_image(source):
+    url = plot_image(source)
+
+    Image.objects.update_or_create(
+        source=source,
+        defaults={'url': url},
     )
 
 
 def csv_col_def(source):  # CSVの列ラベルをテーブル'CSVColumn'に保存
     csv_str = CSVData.objects.get(source=source).csv_str
-    df = pd.read_csv(io.StringIO(csv_str))  # , encoding='UTF8',)
+    df = pd.read_csv(io.StringIO(csv_str))
     columns = list(df.columns)
 
     for column in columns:  # 数値はY軸、その他はX軸をデフォルトとする
@@ -50,9 +64,12 @@ class SourceCreateView(CreateView):  # 登録画面
 
     def form_valid(self, form):
         self.object = form.save()
-        csv_str(self.object)
+        csv = self.request.FILES['csv']
+        update_csv(self.object.id, csv)
+        csv_str(self.object, csv)
         csv_col_def(self.object)
         PlotMode(source=self.object, mode='lines').save()  # 折れ線をデフォルトに
+        up_image(self.object)
         messages.info(self.request, f'{self.object.name}を保存しました。')
         return redirect(self.get_success_url())
 
@@ -87,6 +104,7 @@ class SourceUpdateView(UpdateView):  # 更新画面
         try:
             if formset_col.is_valid():
                 formset_col.save()
+                up_image(self.object)
                 messages.info(
                     self.request, f'{self.object.name}の軸の設定を保存しました。')
                 return redirect(self.get_success_url())
@@ -95,32 +113,32 @@ class SourceUpdateView(UpdateView):  # 更新画面
         try:
             if form_plot.is_valid():
                 form_plot.save()
+                up_image(self.object)
                 messages.info(
                     self.request, f'{self.object.name}のグラフ種別を保存しました。')
                 return redirect(self.get_success_url())
         except Exception: pass
 
         if form.is_valid():
-            self.object = form.save()  # commit=False)  # ← 必要性
-            source = Source.objects.get(pk=self.object.id)
+            self.object = form.save()
             try:
-                print(source.csv.size)
-                csv_str(self.object)
+                csv = self.request.FILES['csv']
+                csv_str(self.object, csv)
                 csv_col_def(self.object)
+                up_image(self.object)
             except Exception: pass
             messages.info(
                 self.request, f'{self.object.name}を保存しました。')
             return redirect(self.get_success_url())
         else:
-            print('Not Valid!')
-            for ele in form: print(ele)
             return self.render_to_response(context)
 
 
 class SourceFilterView(FilterView):
     model = Source
     filterset_class = SourceFilter
-    queryset = Source.objects.all().order_by('-updated_at')  # 更新順をデフォに
+    queryset = Source.objects.prefetch_related(
+        'image').order_by('-updated_at')
 
     strict = False  # クエリ未指定時の全件検索オプション（django-filter2.0以降）
     paginate_by = 5  # 1ページあたりの表示件数

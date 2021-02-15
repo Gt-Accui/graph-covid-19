@@ -103,12 +103,19 @@ def bar_charts(fig, df, csvcolumns, y_axis):  # 積み棒グラフ
 
 
 def default_layout(fig, trg_model):
-    # height = pyautogui.size().height - 350
     fig.update_layout(
-        title=trg_model.name,  # height=height,
+        title=trg_model.name,
         xaxis=dict(rangeslider=dict(visible=True),),  # レンジスライダー
         showlegend=True,
         margin=dict(l=50, r=50, t=50, b=50),
+    )
+
+
+def image_default(fig, trg_model):  # 一覧表示用
+    fig.update_layout(
+        xaxis=dict(title=''),
+        margin=dict(l=50, r=5, t=5, b=20),
+        legend=dict(orientation='h', x=0, yanchor='top', y=-0.1),
     )
 
 # ↑ 共通レイアウト

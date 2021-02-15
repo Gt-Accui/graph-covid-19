@@ -4,10 +4,19 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from django.contrib import messages
 
-from .models import Process
+from .models import Process, Image
 from .forms import ProcessForm
-from .plot import plot
+from .plot import plot, plot_image
 from .filters import ProcessFilter
+
+
+def up_image(process):
+    url = plot_image(process)
+
+    Image.objects.update_or_create(
+        process=process,
+        defaults={'url': url},
+    )
 
 
 class ProcessCreateView(CreateView):  # 登録画面
@@ -19,6 +28,7 @@ class ProcessCreateView(CreateView):  # 登録画面
 
     def form_valid(self, form):
         self.object = form.save()
+        up_image(self.object)
         messages.info(self.request, f'{self.object.name}を保存しました。')
         return redirect(self.get_success_url())
 
@@ -44,6 +54,7 @@ class ProcessUpdateView(UpdateView):  # 更新画面
 
         if form.is_valid():
             self.object = form.save()
+            up_image(self.object)
             messages.info(
                 self.request, f'{self.object.name}を保存しました。')
             return redirect(self.get_success_url())
@@ -57,7 +68,8 @@ class ProcessUpdateView(UpdateView):  # 更新画面
 class ProcessFilterView(FilterView):
     model = Process
     filterset_class = ProcessFilter
-    queryset = Process.objects.all().order_by('-updated_at')  # 更新順をデフォに
+    queryset = Process.objects.prefetch_related(
+        'image').order_by('-updated_at')
 
     strict = False  # クエリ未指定時の全件検索オプション（django-filter2.0以降）
     paginate_by = 5  # 1ページあたりの表示件数

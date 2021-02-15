@@ -25,10 +25,10 @@
                     {% endif %}
                 {% endfor %}
                 <div class="form-group">
-                    <label>{{ form.csv.label }}{% if form.csv.field.required %}<span class="asteriskField">*</span>{% endif %}</label>
+                    <label>CSV<span class="asteriskField">*</span></label>
                     <div class="input-group">
                         <div class="custom-file">
-                            {{ form.csv }}
+                            <input type="file" name="csv" class="custom-file-input" maxlength="300" id="csv">
                             <label class="custom-file-label" data-browse="参照">CSVのみ（ドロップ可）</label>
                         </div>
                         <div class="input-group-append">

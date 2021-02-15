@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from pathlib import Path
 # ↓ MEDIA_ROOT用
 import os
 import dj_database_url
@@ -43,6 +42,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'graph',
     'process',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -137,6 +138,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'graph', 'static', 'graph')
 # CSS用
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# cloudinary用
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 # 本番環境との切り分け
 try:
     from .local_settings import *
@@ -146,6 +150,12 @@ if not DEBUG:
     SECRET_KEY = os.environ['SECRET_KEY']
     import django_heroku
     django_heroku.settings(locals())
+    import cloudinary
+    cloudinary.config(
+        cloud_name=os.environ['CLOUDINARY_CLOUD_NAME'],
+        api_key=os.environ['CLOUDINARY_API_KEY'],
+        api_secret=os.environ['CLOUDINARY_API_SECRET']
+    )
 
 db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
 DATABASES['default'].update(db_from_env)

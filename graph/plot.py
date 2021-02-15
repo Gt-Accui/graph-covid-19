@@ -1,10 +1,13 @@
-from plotly import graph_objects as go
+import plotly.graph_objects as go
 import pandas as pd
 import io
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 from .models import CSVColumn, CSVData, PlotMode
 from .charts import line_charts, weekday_charts, get_sma, sma_charts
-from .charts import bar_charts, default_layout
+from .charts import bar_charts, default_layout, image_default
 from .csvdf import get_df_labels
 
 
@@ -40,8 +43,25 @@ def plot(source):
 
     csvcolumns = CSVColumn.objects.filter(source=source)
     csv_str = CSVData.objects.get(source=source).csv_str
-    df = pd.read_csv(io.StringIO(csv_str))  # , encoding='UTF8',)
+    df = pd.read_csv(io.StringIO(csv_str))
     df.columns = get_df_labels(csvcolumns, df)
     set_mode(fig, df, csvcolumns, source)
 
     return fig.to_html(include_plotlyjs=False)
+
+
+def plot_image(source):
+    fig = go.Figure()
+
+    csvcolumns = CSVColumn.objects.filter(source=source)
+    csv_str = CSVData.objects.get(source=source).csv_str
+    df = pd.read_csv(io.StringIO(csv_str))
+    df.columns = get_df_labels(csvcolumns, df)
+    set_mode(fig, df, csvcolumns, source)
+    image_default(fig, source)
+
+    image_name = './graph/static/graph/image/' + source.name + '.svg'
+    fig.write_image(image_name, scale=0.5, engine='kaleido')
+    res = cloudinary.uploader.upload(
+        open(image_name, 'rb'), public_id=source.name)
+    return res['secure_url']

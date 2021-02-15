@@ -5,7 +5,7 @@ from .models import Source, CSVColumn, PlotMode
 class SourceForm(forms.ModelForm):
     class Meta:
         model = Source
-        fields = ('name', 'source', 'url', 'csv')
+        fields = ('name', 'source', 'url')
         widgets = {
             'name': forms.TextInput(
                 attrs={'placeholder': '記入例：PCR陽性者数（日別）'}),
@@ -13,16 +13,7 @@ class SourceForm(forms.ModelForm):
                 attrs={'placeholder': '記入例：厚生労働省（日本）'}),
             'url': forms.URLInput(
                 attrs={'placeholder': '情報源のURL'}),
-            'csv': forms.FileInput(
-                attrs={'class': 'custom-file-input'}),
         }
-
-    def clean_csv(self):
-        csv = self.cleaned_data['csv']
-        if csv.name.endswith('.csv'):
-            return csv
-        else:
-            raise forms.ValidationError('拡張子はcsvのみ対応')
 
 
 class CSVColumnForm(forms.ModelForm):
@@ -31,9 +22,9 @@ class CSVColumnForm(forms.ModelForm):
         fields = ('csv_col_num', 'csv_col_label', 'df_col_label', 'axis')
         widgets = {
             'csv_col_num': forms.NumberInput(
-                attrs={'readonly': True}),  # 読取のみ
+                attrs={'readonly': True}),
             'csv_col_label': forms.TextInput(
-                attrs={'readonly': True}),  # 読取のみ
+                attrs={'readonly': True}),
             'df_col_label': forms.TextInput(
                 attrs={'placeholder': 'グラフでの表示名'}),
             'axis': forms.Select(),

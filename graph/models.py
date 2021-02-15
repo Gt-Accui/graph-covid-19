@@ -10,8 +10,8 @@ class Source(models.Model):
         verbose_name='出典', max_length=200, blank=True, null=True,)
     url = models.URLField(
         verbose_name='URL', max_length=300, blank=True, null=True,)
-    csv = models.FileField(
-        verbose_name='CSV', max_length=300, upload_to='csv/', unique=True,)
+    csv = models.CharField(
+        verbose_name='CSV', max_length=300, blank=True, null=True,)
     ''' メモ欄追加するか '''
     created_at = models.DateTimeField(
         verbose_name='登録日', auto_now_add=True,)
@@ -19,20 +19,11 @@ class Source(models.Model):
         verbose_name='更新日', auto_now=True, blank=True, null=True,)
 
     def filename(self):  # ファイル名のみを返す
-        return path.basename(self.csv.name)
-
-    def save(self, *args, **kwargs):  # 既存CSVがあれば削除後に新規保存
-        try:
-            old = Source.objects.get(id=self.id)
-            if old.csv != self.csv:
-                old.csv.delete(save=False)
-        except Exception: pass
-        super(Source, self).save(*args, **kwargs)
+        return path.basename(self.csv)
 
     def get_absolute_url(self):
         return reverse('update', kwargs={'pk': self.id})
 
-    # 以下は管理サイト上の表示設定
     def __str__(self):
         return self.name
 
@@ -58,7 +49,6 @@ class CSVColumn(models.Model):
         verbose_name='軸', choices=axislist, max_length=1, blank=True,
         null=True,)
 
-    # 以下は管理サイト上の表示設定
     def __str__(self):
         return f'{self.source} - {self.df_col_label}'
 
@@ -74,13 +64,27 @@ class CSVData(models.Model):
     csv_str = models.TextField(
         verbose_name='CSVデータ', blank=True, null=True,)
 
-    # 以下は管理サイト上の表示設定
     def __str__(self):
         return f'{self.source}'
 
     class Meta:
         verbose_name = 'CSVデータ'
         verbose_name_plural = 'CSVデータ'
+
+
+class Image(models.Model):
+    source = models.ForeignKey(
+        verbose_name='対象CSV', to=Source, on_delete=models.CASCADE,
+        editable=False, related_name='image',)
+    url = models.CharField(
+        verbose_name='画像URL', max_length=200, blank=True, null=True,)
+
+    def __str__(self):
+        return f'{self.source}'
+
+    class Meta:
+        verbose_name = '画像'
+        verbose_name_plural = '画像'
 
 
 class PlotMode(models.Model):
@@ -95,7 +99,6 @@ class PlotMode(models.Model):
         verbose_name='グラフの種類', choices=modelist, max_length=100,
         default='lines',)
 
-    # 以下は管理サイト上の表示設定
     def __str__(self):
         return f'{self.source} - {self.mode}'
 

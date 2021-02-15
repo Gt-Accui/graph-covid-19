@@ -19,7 +19,6 @@ class SourceFilter(FilterSet):
         label='更新日（以前）', field_name='updated_at', lookup_expr='lte')
 
     order_by = MyOrderingFilter(
-        # tuple-mapping retains order
         fields=(
             ('name', 'name'),
             ('updated_at', 'updated_at'),
