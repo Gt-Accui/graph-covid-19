@@ -7,7 +7,7 @@ import sys
 sys.path.append('../')
 from graph.charts import line_charts, weekday_charts, get_sma, sma_charts
 from graph.charts import default_layout, image_default
-from graph.csvdf import csv_to_df, df_process, get_csvcolumns
+from graph.csvdf import csv_to_df, df_process, get_csvcolumns, df_slice
 
 
 def df_calc(fig, df1, df2, process):
@@ -93,6 +93,9 @@ def plot_image(process):
         return fig.to_html(include_plotlyjs=False)
     df1 = df_process(df1, process.data1_process, process.data1_periods)
     df2 = df_process(df2, process.data2_process, process.data2_periods)
+    rows = 189
+    df1 = df_slice(df1, rows)
+    df2 = df_slice(df2, rows)
 
     set_mode(fig, df1, df2, process)
     image_default(fig, process)

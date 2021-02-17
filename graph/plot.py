@@ -8,7 +8,7 @@ import cloudinary.api
 from .models import CSVColumn, CSVData, PlotMode
 from .charts import line_charts, weekday_charts, get_sma, sma_charts
 from .charts import bar_charts, default_layout, image_default
-from .csvdf import get_df_labels
+from .csvdf import get_df_labels, df_slice
 
 
 def set_mode(fig, df, csvcolumns, source):
@@ -57,6 +57,8 @@ def plot_image(source):
     csv_str = CSVData.objects.get(source=source).csv_str
     df = pd.read_csv(io.StringIO(csv_str))
     df.columns = get_df_labels(csvcolumns, df)
+    rows = 189
+    df = df_slice(df, rows)
     set_mode(fig, df, csvcolumns, source)
     image_default(fig, source)
 

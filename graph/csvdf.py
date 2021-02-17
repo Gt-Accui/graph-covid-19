@@ -85,3 +85,13 @@ def get_csvcolumns(process):
     return csvcolumns
 
 # ↑ 'CSV組合せ'で使用
+# ↓ 共用
+
+
+def df_slice(df, rows):
+    df_rows = len(df)
+    if df_rows > rows:
+        df = df[df_rows - rows:df_rows]
+    return df
+
+# ↑ 共用
