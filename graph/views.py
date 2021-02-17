@@ -30,12 +30,14 @@ def csv_str(source, csv):
 
 
 def up_image(source):
-    url = plot_image(source)
+    try:  # for debug
+        url = plot_image(source)
 
-    Image.objects.update_or_create(
-        source=source,
-        defaults={'url': url},
-    )
+        Image.objects.update_or_create(
+            source=source,
+            defaults={'url': url},
+        )
+    except Exception as e_up_image: print('e_up_image', e_up_image)
 
 
 def csv_col_def(source):  # CSVの列ラベルをテーブル'CSVColumn'に保存
