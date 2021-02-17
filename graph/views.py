@@ -141,7 +141,7 @@ class SourceFilterView(FilterView):
         'image').order_by('-updated_at')
 
     strict = False  # クエリ未指定時の全件検索オプション（django-filter2.0以降）
-    paginate_by = 5  # 1ページあたりの表示件数
+    paginate_by = 4  # 1ページあたりの表示件数
 
     def get(self, request, **kwargs):
         if request.GET:
