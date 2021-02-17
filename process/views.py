@@ -11,14 +11,12 @@ from .filters import ProcessFilter
 
 
 def up_image(process):
-    try:  # for debug
-        url = plot_image(process)
+    url = plot_image(process)
 
-        Image.objects.update_or_create(
-            process=process,
-            defaults={'url': url},
-        )
-    except Exception as e_up_image: print('e_up_image', e_up_image)
+    Image.objects.update_or_create(
+        process=process,
+        defaults={'url': url},
+    )
 
 
 class ProcessCreateView(CreateView):  # 登録画面
