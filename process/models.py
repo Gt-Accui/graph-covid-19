@@ -20,7 +20,7 @@ class Process(models.Model):
     )
 
     process_list = (
-        ('shift', '差分'), ('pct_change', '変化率'),
+        ('shift', 'X軸シフト'), ('difference', '差分'), ('pct_change', '変化率'),
     )
     data1_process = models.CharField(
         verbose_name='データ１の処理', choices=process_list,

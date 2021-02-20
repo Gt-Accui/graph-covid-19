@@ -61,11 +61,13 @@ def df_process(df, process, periods):
     if process and periods:
         try:  # index が日付のとき
             periods_str = f'{periods}D'
-            if process == 'shift': return df - df.shift(freq=periods_str)
+            if process == 'shift': return df.shift(freq=periods_str)
+            elif process == 'difference': return df - df.shift(freq=periods_str)
             elif process == 'pct_change': return df.pct_change(freq=periods_str)
             else: return df
         except Exception:
-            if process == 'shift': return df.diff(periods)
+            if process == 'shift': return df.shift(periods)
+            elif process == 'difference': return df.diff(periods)
             elif process == 'pct_change': return df.pct_change(periods)
             else: return df
     else:
