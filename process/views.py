@@ -4,10 +4,17 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from django.contrib import messages
 
-from .models import Process, Image
-from .forms import ProcessForm
+from .models import Process, Memo, Image
+from .forms import ProcessForm, MemoFormset
 from .plot import plot, plot_image
 from .filters import ProcessFilter
+
+
+def up_memo(process, memo):
+    Image.objects.update_or_create(
+        process=process,
+        defaults={'memo': memo},
+    )
 
 
 def up_image(process):
@@ -28,6 +35,8 @@ class ProcessCreateView(CreateView):  # 登録画面
 
     def form_valid(self, form):
         self.object = form.save()
+        memo = self.request.POST['memo']
+        up_memo(self.object, memo)
         up_image(self.object)
         messages.info(self.request, f'{self.object.name}を保存しました。')
         return redirect(self.get_success_url())
@@ -43,14 +52,27 @@ class ProcessUpdateView(UpdateView):  # 更新画面
     def get_context_data(self, **kwargs):
         context = super(ProcessUpdateView, self).get_context_data(**kwargs)
         process = get_object_or_404(Process, pk=self.kwargs.get('pk'))
+        memo = Memo.objects.get_or_create(process=self.object)
         context.update({
             'plot': plot(process),
             'process': process,
+            'memo': MemoFormset(
+                self.request.POST or None, instance=process,
+                prefix='memo',),
         })
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
+        formset_memo = context['memo']
+
+        try:
+            if formset_memo.is_valid():
+                formset_memo.save()
+                messages.info(
+                    self.request, f'{self.object.name}のメモを保存しました。')
+                return redirect(self.get_success_url())
+        except Exception: pass
 
         if form.is_valid():
             self.object = form.save()

@@ -1,0 +1,57 @@
+{% load crispy_forms_tags %}
+{{ form.certifications.errors }}
+<!-- 設定タブ -->
+<div class="container">
+    <!-- 種別フォームを表示 -->
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-12">
+            <div class="float-left">
+                <h3 class="text-left">メモ</h3>
+            </div>
+            <div class="float-right">
+                <button type="submit" class="btn btn-outline-secondary" form="memo-form">保存</button>
+            </div>
+        </div>
+        <div class="col-12" style="margin-top: 15px;">
+            <form method="POST" id="memo-form">
+            {% csrf_token %}
+                <fieldset hidden>{{ form }}</fieldset>
+                {{ memo|crispy }}
+            </form>
+        </div>
+        <div class="col-12">
+            <div class="float-right">
+                <button type="submit" class="btn btn-outline-secondary" form="memo-form">保存</button>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <!-- 参照データを表示 -->
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-12">
+            <form method="GET" id="source-da-form">
+                <!-- 編集不可 -->
+                <fieldset disabled>
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                {% for field in form %}
+                    {% if "処理" in field.label %}
+                    <div class="col-12">
+                        <div class="col-6 float-left">
+                            {{ field|as_crispy_field }}
+                        </div>
+                    {% elif "間隔" in field.label %}
+                        <div class="col-6 float-right">
+                            {{ field|as_crispy_field }}
+                        </div>
+                    </div>
+                    {% else %}
+                        {{ field|as_crispy_field }}
+                    {% endif %}
+                {% endfor %}
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- 設定タブ終わり -->

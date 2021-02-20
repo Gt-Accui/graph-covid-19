@@ -7,26 +7,26 @@
             <li class="nav-item">
                 <a href="#plot" class="nav-link">描画</a>
             </li>
-{% comment %}
+            {% if memo %}
             <li class="nav-item">
-                <a href="#setting" class="nav-link">設定</a>
+                <a href="#memo" class="nav-link">メモ</a>
             </li>
-{% endcomment %}
+            {% endif %}
         {% endif %}
             <li class="nav-item">
                 <a href="#reference" class="nav-link">参照</a>
             </li>
         </ul>
-        {% if process %}
+    {% if process %}
         <div id="plot" class="tab-pane p-0"">
             {% include './tab_graph.html' %}
         </div>
-{% comment %}
-        <div id="setting" class="tab-pane p-0">
-            {% include './tab_setting.html' %}
+        {% if memo %}
+        <div id="memo" class="tab-pane p-0">
+            {% include './tab_memo.html' %}
         </div>
-{% endcomment %}
         {% endif %}
+    {% endif %}
         <div id="reference" class="tab-pane p-0">
             {% include './tab_process.html' %}
         </div>

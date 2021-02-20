@@ -1,5 +1,5 @@
 from django import forms
-from .models import Process
+from .models import Process, Memo
 
 import sys
 sys.path.append('../')
@@ -42,3 +42,20 @@ class ProcessForm(forms.ModelForm):
         self.fields['data1_periods'].label = "間隔"
         self.fields['data2_process'].label = "処理"
         self.fields['data2_periods'].label = "間隔"
+
+
+class MemoForm(forms.ModelForm):
+    class Meta:
+        model = Memo
+        fields = ('memo',)
+        widgets = {
+            'memo': forms.Textarea(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['memo'].label = False
+
+
+MemoFormset = forms.inlineformset_factory(
+    Process, Memo, MemoForm, extra=0, can_delete=False, )

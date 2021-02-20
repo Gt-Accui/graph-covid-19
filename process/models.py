@@ -64,12 +64,27 @@ class Process(models.Model):
         verbose_name_plural = '処理・加工'
 
 
+class Memo(models.Model):
+    process = models.ForeignKey(
+        verbose_name='対象CSV', to=Process, on_delete=models.CASCADE,
+        editable=False, related_name='memo',)
+    memo = models.TextField(
+        verbose_name='メモ', blank=True, null=True,)
+
+    def __str__(self):
+        return f'{self.process}'
+
+    class Meta:
+        verbose_name = '処理・加工_メモ'
+        verbose_name_plural = '処理・加工_メモ'
+
+
 class Image(models.Model):
     process = models.ForeignKey(
         verbose_name='対象CSV', to=Process, on_delete=models.CASCADE,
         editable=False, related_name='image',)
     url = models.CharField(
-        verbose_name='画像URL', max_length=300, blank=True, null=True,)
+        verbose_name='画像URL', max_length=500, blank=True, null=True,)
 
     def __str__(self):
         return f'{self.process}'

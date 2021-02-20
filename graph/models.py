@@ -77,7 +77,7 @@ class Image(models.Model):
         verbose_name='対象CSV', to=Source, on_delete=models.CASCADE,
         editable=False, related_name='image',)
     url = models.CharField(
-        verbose_name='画像URL', max_length=300, blank=True, null=True,)
+        verbose_name='画像URL', max_length=500, blank=True, null=True,)
 
     def __str__(self):
         return f'{self.source}'
