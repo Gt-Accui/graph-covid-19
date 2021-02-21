@@ -1,6 +1,10 @@
 $(window).on('resize', function () {
-    var windowheight = $(window).height() - 150;
-    var contentInnerWidth = $('.content').innerWidth();
+    let windowheight = $(window).height() - 150;
+    let contentInnerWidth = $('.content').innerWidth();
+
+    if (windowheight < 400) {
+        windowheight = 400;
+    }
 
     $(".content").css({
         "height": windowheight + "px"

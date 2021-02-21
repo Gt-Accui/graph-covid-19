@@ -11,7 +11,7 @@ from .filters import ProcessFilter
 
 
 def up_memo(process, memo):
-    Image.objects.update_or_create(
+    Memo.objects.update_or_create(
         process=process,
         defaults={'memo': memo},
     )
@@ -35,7 +35,7 @@ class ProcessCreateView(CreateView):  # 登録画面
 
     def form_valid(self, form):
         self.object = form.save()
-        memo = self.request.POST['memo']
+        memo = ""
         up_memo(self.object, memo)
         up_image(self.object)
         messages.info(self.request, f'{self.object.name}を保存しました。')
@@ -52,7 +52,6 @@ class ProcessUpdateView(UpdateView):  # 更新画面
     def get_context_data(self, **kwargs):
         context = super(ProcessUpdateView, self).get_context_data(**kwargs)
         process = get_object_or_404(Process, pk=self.kwargs.get('pk'))
-        memo = Memo.objects.get_or_create(process=self.object)
         context.update({
             'plot': plot(process),
             'process': process,
