@@ -73,7 +73,7 @@ def update_source(source):
 
 
 def update_process(process):
-    # while True:
+    while True:
         wait_time = 72000  # 更新できたとき 20時間後に再実行
         process_up = process.updated_at
         source1_up = process.data1_col.source.updated_at
@@ -101,13 +101,13 @@ def checkup():
         t_update = threading.Thread(
             target=update_source, kwargs={'source': source})
         t_update.start()
-        time.sleep(0.5)
+        time.sleep(10)
 
     for process in Process.objects.all():
         t_update_p = threading.Thread(
             target=update_process, kwargs={'process': process})
         t_update_p.start()
-        time.sleep(0.5)
+        time.sleep(10)
 
 
 t_awake = threading.Thread(target=awake)
