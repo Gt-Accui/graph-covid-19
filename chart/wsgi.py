@@ -10,23 +10,24 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/
 import os
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chart.settings')
-
-application = get_wsgi_application()
-
+# ↓ awake, checkup用
 import threading
 import requests
 # ↓ awake用
 import time
-# ↑ awake用
 # ↓ checkup用
 from datetime import datetime, timezone
-
 import sys
-sys.path.append('../')
 from graph.models import Source
-from graph.views_def import csv_str, updated
-# ↑ checkup用
+from graph.views_def import csv_str, updated, up_image
+from process.models import Process
+from process.views_def import up_image as up_image_p
+from process.views_def import updated as updated_p
+sys.path.append('../')
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chart.settings')
+
+application = get_wsgi_application()
 
 
 def awake():
@@ -60,6 +61,7 @@ def update_source(source):
                         try:
                             csv_str(source, csv_data)
                             updated(source.pk, last_modified)
+                            up_image(source)
                             done = True
                         except Exception: time.sleep(5)
                     print('End Update', source)
@@ -70,11 +72,41 @@ def update_source(source):
         time.sleep(wait_time)
 
 
+def update_process(process):
+    # while True:
+        wait_time = 72000  # 更新できたとき 20時間後に再実行
+        process_up = process.updated_at
+        source1_up = process.data1_col.source.updated_at
+        source2_up = process.data2_col.source.updated_at
+
+        if process_up < source1_up or \
+                process_up < source2_up:
+            print('Start Update-P', process)
+            done = False
+            while not done:
+                try:
+                    updated_p(process.pk, max(source1_up, source2_up))
+                    up_image_p(process)
+                    done = True
+                except Exception: time.sleep(5)
+            print('End Update-P', process)
+        else:
+            wait_time = 3600  # 更新がないとき 1時間後に再実行
+            print('No Update-P', process, 'Retry after 1 hour')
+        time.sleep(wait_time)
+
+
 def checkup():
     for source in Source.objects.all():
         t_update = threading.Thread(
             target=update_source, kwargs={'source': source})
         t_update.start()
+        time.sleep(0.5)
+
+    for process in Process.objects.all():
+        t_update_p = threading.Thread(
+            target=update_process, kwargs={'process': process})
+        t_update_p.start()
         time.sleep(0.5)
 
 

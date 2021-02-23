@@ -1,4 +1,4 @@
-from .models import Memo, Image
+from .models import Process, Memo, Image
 from .plot import plot_image
 
 
@@ -7,6 +7,12 @@ def up_memo(process, memo):
         process=process,
         defaults={'memo': memo},
     )
+
+
+def updated(pk, updated_at):
+    Process.objects.update_or_create(
+        pk=pk,
+        defaults={'updated_at': updated_at},)
 
 
 def up_image(process):
