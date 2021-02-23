@@ -16,7 +16,7 @@ class Source(models.Model):
     created_at = models.DateTimeField(
         verbose_name='登録日', auto_now_add=True,)
     updated_at = models.DateTimeField(
-        verbose_name='更新日', auto_now=True, blank=True, null=True,)
+        verbose_name='更新日', blank=True, null=True,)  # auto_now=True,)
 
     def filename(self):  # ファイル名のみを返す
         return path.basename(self.csv)

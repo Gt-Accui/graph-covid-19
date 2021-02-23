@@ -3,56 +3,13 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from django.contrib import messages
-import pandas as pd
-import io
+from datetime import datetime
 
-from .models import Source, CSVColumn, CSVData, Image, PlotMode
+from .models import Source, PlotMode
 from .forms import SourceForm, CSVColumnFormset, PlotModeFormset
-from .plot import plot, plot_image
+from .plot import plot
 from .filters import SourceFilter
-
-
-def update_csv(pk, csv):
-    Source.objects.update_or_create(
-        pk=pk,
-        defaults={'csv': csv.name},)
-
-
-def csv_str(source, csv):
-    with csv.open() as csv:  # csvを列ごとに取り出し、文字列として結合
-        csv_str = ''
-        for line in csv: csv_str += line.decode(encoding='UTF8')
-        csv.close()
-
-    CSVData.objects.update_or_create(
-        source=source,
-        defaults={'csv_str': csv_str},)
-
-
-def up_image(source):
-    url = plot_image(source)
-
-    Image.objects.update_or_create(
-        source=source,
-        defaults={'url': url},
-    )
-
-
-def csv_col_def(source):  # CSVの列ラベルをテーブル'CSVColumn'に保存
-    csv_str = CSVData.objects.get(source=source).csv_str
-    df = pd.read_csv(io.StringIO(csv_str))
-    columns = list(df.columns)
-
-    for column in columns:  # 数値はY軸、その他はX軸をデフォルトとする
-        col_num = columns.index(column)
-        axis = 'Y'
-        try: df.iloc[[0], [col_num]].values[0] / 1  # 日付はエラーと判定される
-        except Exception: axis = 'X'
-
-        CSVColumn.objects.update_or_create(
-            source=source, csv_col_num=col_num, csv_col_label=column,
-            defaults={'df_col_label': column, 'axis': axis},
-            )
+from .views_def import update_csv, csv_str, csv_col_def, updated, up_image
 
 
 class SourceCreateView(CreateView):  # 登録画面
@@ -68,6 +25,7 @@ class SourceCreateView(CreateView):  # 登録画面
         update_csv(self.object.id, csv)
         csv_str(self.object, csv)
         csv_col_def(self.object)
+        updated(self.object.pk, datetime.now())
         PlotMode(source=self.object, mode='lines').save()  # 折れ線をデフォルトに
         up_image(self.object)
         messages.info(self.request, f'{self.object.name}を保存しました。')
@@ -125,8 +83,9 @@ class SourceUpdateView(UpdateView):  # 更新画面
                 csv = self.request.FILES['csv']
                 csv_str(self.object, csv)
                 csv_col_def(self.object)
-                up_image(self.object)
+                # up_image(self.object)
             except Exception: pass
+            updated(self.object.pk, datetime.now())
             messages.info(
                 self.request, f'{self.object.name}を保存しました。')
             return redirect(self.get_success_url())

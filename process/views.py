@@ -4,26 +4,11 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from django.contrib import messages
 
-from .models import Process, Memo, Image
+from .models import Process
 from .forms import ProcessForm, MemoFormset
-from .plot import plot, plot_image
+from .plot import plot
 from .filters import ProcessFilter
-
-
-def up_memo(process, memo):
-    Memo.objects.update_or_create(
-        process=process,
-        defaults={'memo': memo},
-    )
-
-
-def up_image(process):
-    url = plot_image(process)
-
-    Image.objects.update_or_create(
-        process=process,
-        defaults={'url': url},
-    )
+from .views_def import up_memo, up_image
 
 
 class ProcessCreateView(CreateView):  # 登録画面
