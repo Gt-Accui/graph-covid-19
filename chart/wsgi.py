@@ -63,7 +63,7 @@ def update_source(source):
                             updated(source.pk, last_modified)
                             up_image(source)
                             done = True
-                        except Exception: time.sleep(5)
+                        except Exception: time.sleep(7)
                     print('End Update', source)
                 else:
                     wait_time = 3600  # 更新がないとき 1時間後に再実行
@@ -88,7 +88,7 @@ def update_process(process):
                     updated_p(process.pk, max(source1_up, source2_up))
                     up_image_p(process)
                     done = True
-                except Exception: time.sleep(5)
+                except Exception: time.sleep(7)
             print('End Update-P', process)
         else:
             wait_time = 3600  # 更新がないとき 1時間後に再実行
@@ -101,13 +101,13 @@ def checkup():
         t_update = threading.Thread(
             target=update_source, kwargs={'source': source})
         t_update.start()
-        time.sleep(10)
+        time.sleep(60)
 
     for process in Process.objects.all():
         t_update_p = threading.Thread(
             target=update_process, kwargs={'process': process})
         t_update_p.start()
-        time.sleep(10)
+        time.sleep(60)
 
 
 t_awake = threading.Thread(target=awake)
