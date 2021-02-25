@@ -110,11 +110,10 @@ def checkup():
         time.sleep(11)
 
 
+'''
 t_awake = threading.Thread(target=awake)
 t_awake.start()
 
-checkup()
-'''
 t_checkup = threading.Thread(target=checkup)
 t_checkup.start()
 '''
