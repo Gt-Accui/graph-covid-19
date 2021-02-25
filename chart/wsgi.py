@@ -60,7 +60,7 @@ def update_source(source):
                     while not done:
                         try:
                             csv_str(source, csv_data)
-                            time.sleep(1)
+                            time.sleep(2)
                             updated(source.pk, last_modified)
                             time.sleep(1)
                             up_image(source)
@@ -104,13 +104,13 @@ def checkup():
         t_update = threading.Thread(
             target=update_source, kwargs={'source': source})
         t_update.start()
-        time.sleep(1)
+        time.sleep(20)
 
     for process in Process.objects.all():
         t_update_p = threading.Thread(
             target=update_process, kwargs={'process': process})
         t_update_p.start()
-        time.sleep(1)
+        time.sleep(15)
 
 
 t_awake = threading.Thread(target=awake)
