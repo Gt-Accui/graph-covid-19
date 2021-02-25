@@ -104,13 +104,13 @@ def checkup():
         t_update = threading.Thread(
             target=update_source, kwargs={'source': source})
         t_update.start()
-        time.sleep(20)
+        time.sleep(5)
 
     for process in Process.objects.all():
         t_update_p = threading.Thread(
             target=update_process, kwargs={'process': process})
         t_update_p.start()
-        time.sleep(15)
+        time.sleep(5)
 
 
 t_awake = threading.Thread(target=awake)
