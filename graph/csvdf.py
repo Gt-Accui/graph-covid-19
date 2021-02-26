@@ -90,7 +90,7 @@ def get_csvcolumns(process):
 # ↓ 共用
 
 
-def df_slice(df, rows):
+def df_slice(df, rows):  # 一覧表示で使用
     df_rows = len(df)
     if df_rows > rows:
         df = df[df_rows - rows:df_rows]

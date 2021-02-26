@@ -10,24 +10,25 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/
 import os
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chart.settings')
-
-application = get_wsgi_application()
-
 # ↓ awake, checkup用
 import threading
 import requests
 # ↓ awake用
 import time
 # ↓ checkup用
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 import sys
-sys.path.append('../')
 from graph.models import Source
 from graph.views_def import csv_str, updated, up_image
 from process.models import Process
 from process.views_def import up_image as up_image_p
 from process.views_def import updated as updated_p
+sys.path.append('../')
+# ↑ awake, checkup用
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chart.settings')
+
+application = get_wsgi_application()
 
 
 def awake():
@@ -40,9 +41,10 @@ def awake():
 
 
 def update_source(source):
+    print('Start Update', source)
     res = ''
     try: res = requests.head(source.url)
-    except Exception as e_res: print('e_res', e_res)
+    except Exception as e_res: print('e_res', source, e_res)
     if res:
         if res.status_code == 200 and \
                 res.headers['Content-Type'] == 'text/csv':
@@ -52,7 +54,6 @@ def update_source(source):
                 '%a, %d %b %Y %H:%M:%S GMT'
                 ).astimezone(timezone.utc)
             if source_updated < last_modified:
-                print('Start Update', source)
                 csv_data = requests.get(source.url).content.decode('utf-8')
                 done = False
                 trial = 0
@@ -67,17 +68,18 @@ def update_source(source):
                         print(f'source {source} trial{trial} Faild \n{e_s}')
                         time.sleep(1)
                 print('End Update', source)
+            else: print('No Update', source)
         else: print('e_res_status', res.status_code, source)
 
 
 def update_process(process):
-    process_up = process.updated_at + timedelta()
+    print('Start Update-P', process)
+    process_up = process.updated_at
     source1_up = process.data1_col.source.updated_at
     source2_up = process.data2_col.source.updated_at
 
     if process_up < source1_up or \
             process_up < source2_up:
-        print('Start Update-P', process)
         done = False
         trial = 0
         while not done:
@@ -90,16 +92,19 @@ def update_process(process):
                 print(f'process {process} trial{trial} Faild \n{e_p}')
                 time.sleep(1)
         print('End Update-P', process)
+    else: print('No Update', process)
 
 
 def checkup():
     wait_time = 3600  # 1時間間隔で再実行
     while True:
+        print('Start Checkup')
         for source in Source.objects.all():
             update_source(source)
 
         for process in Process.objects.all():
             update_process(process)
+        print('End Checkup')
         time.sleep(wait_time)
 
 

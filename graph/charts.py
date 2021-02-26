@@ -37,8 +37,8 @@ def weekday_charts(fig, df, csvcolumns, y_axis):  # 曜日ごとの折れ線グ�
 
     for i in range(7):
         weekday_df = df_i[df_i.index.weekday == i]
-        x_data, x_labels, y_data, y_labels = get_x_y_data_label(
-            weekday_df, csvcolumns)
+        x_data, x_labels, y_data, y_labels = \
+            get_x_y_data_label(weekday_df, csvcolumns)
         fig.add_trace(go.Scatter(
             x=x_data[0], y=y_data[0], yaxis=y_axis, mode='lines',
             name=weekday_df.index[0].strftime('%a'),
