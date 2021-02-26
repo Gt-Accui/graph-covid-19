@@ -3,12 +3,13 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 from django.contrib import messages
+from datetime import datetime
 
 from .models import Process
 from .forms import ProcessForm, MemoFormset
 from .plot import plot
 from .filters import ProcessFilter
-from .views_def import up_memo, up_image
+from .views_def import up_memo, up_image, updated
 
 
 class ProcessCreateView(CreateView):  # 登録画面
@@ -22,6 +23,7 @@ class ProcessCreateView(CreateView):  # 登録画面
         self.object = form.save()
         memo = ""
         up_memo(self.object, memo)
+        updated(self.object.pk, datetime.now())
         up_image(self.object)
         messages.info(self.request, f'{self.object.name}を保存しました。')
         return redirect(self.get_success_url())
