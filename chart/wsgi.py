@@ -18,12 +18,12 @@ import time
 # ↓ checkup用
 from datetime import datetime, timezone
 import sys
+sys.path.append('../')
 from graph.models import Source
 from graph.views_def import csv_str, updated, up_image
 from process.models import Process
 from process.views_def import up_image as up_image_p
 from process.views_def import updated as updated_p
-sys.path.append('../')
 # ↑ awake, checkup用
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chart.settings')
