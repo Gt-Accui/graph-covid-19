@@ -59,15 +59,13 @@ def update_source(source):
                 while not done:
                     try:
                         csv_str(source, csv_data)
-                        time.sleep(2)
                         updated(source.pk, last_modified)
-                        time.sleep(1)
                         up_image(source)
                         done = True
                     except Exception as e_s:
                         trial += 1
                         print(f'source {source} trial{trial} Faild \n{e_s}')
-                        time.sleep(60)
+                        time.sleep(1)
                 print('End Update', source)
         else: print('e_res_status', res.status_code, source)
 
@@ -85,13 +83,12 @@ def update_process(process):
         while not done:
             try:
                 updated_p(process.pk, max(source1_up, source2_up))
-                time.sleep(2)
                 up_image_p(process)
                 done = True
             except Exception as e_p:
                 trial += 1
                 print(f'process {process} trial{trial} Faild \n{e_p}')
-                time.sleep(60)
+                time.sleep(1)
         print('End Update-P', process)
 
 
