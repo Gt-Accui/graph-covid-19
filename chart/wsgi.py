@@ -20,7 +20,7 @@ import requests
 # ↓ awake用
 import time
 # ↓ checkup用
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import sys
 sys.path.append('../')
 from graph.models import Source
@@ -40,75 +40,70 @@ def awake():
 
 
 def update_source(source):
-    while True:
-        wait_time = 72000  # 更新できたとき 20時間後に再実行
-        res = ''
-        try: res = requests.head(source.url)
-        except Exception as e_res: print('e_res', e_res)
-        if res:
-            if res.status_code == 200 and \
-                    res.headers['Content-Type'] == 'text/csv':
-                source_updated = source.updated_at
-                last_modified = datetime.strptime(
-                    res.headers['Last-Modified'],
-                    '%a, %d %b %Y %H:%M:%S GMT'
-                    ).astimezone(timezone.utc)
-                if source_updated < last_modified:
-                    print('Start Update', source)
-                    csv_data = requests.get(source.url).content.decode('utf-8')
-                    done = False
-                    while not done:
-                        try:
-                            csv_str(source, csv_data)
-                            time.sleep(2)
-                            updated(source.pk, last_modified)
-                            time.sleep(1)
-                            up_image(source)
-                            done = True
-                        except Exception: time.sleep(1)
-                    print('End Update', source)
-                else:
-                    wait_time = 3600  # 更新がないとき 1時間後に再実行
-                    print('No Update', source, 'Retry after 1 hour')
-            else: print('e_res_status', res.status_code, source)
-        time.sleep(wait_time)
+    res = ''
+    try: res = requests.head(source.url)
+    except Exception as e_res: print('e_res', e_res)
+    if res:
+        if res.status_code == 200 and \
+                res.headers['Content-Type'] == 'text/csv':
+            source_updated = source.updated_at
+            last_modified = datetime.strptime(
+                res.headers['Last-Modified'],
+                '%a, %d %b %Y %H:%M:%S GMT'
+                ).astimezone(timezone.utc)
+            if source_updated < last_modified:
+                print('Start Update', source)
+                csv_data = requests.get(source.url).content.decode('utf-8')
+                done = False
+                trial = 0
+                while not done:
+                    try:
+                        csv_str(source, csv_data)
+                        time.sleep(2)
+                        updated(source.pk, last_modified)
+                        time.sleep(1)
+                        up_image(source)
+                        done = True
+                    except Exception as e_s:
+                        trial += 1
+                        print(f'source {source} trial{trial} Faild \n{e_s}')
+                        time.sleep(60)
+                print('End Update', source)
+        else: print('e_res_status', res.status_code, source)
 
 
 def update_process(process):
-    while True:
-        wait_time = 72000  # 更新できたとき 20時間後に再実行
-        process_up = process.updated_at
-        source1_up = process.data1_col.source.updated_at
-        source2_up = process.data2_col.source.updated_at
+    process_up = process.updated_at + timedelta()
+    source1_up = process.data1_col.source.updated_at
+    source2_up = process.data2_col.source.updated_at
 
-        if process_up < source1_up or \
-                process_up < source2_up:
-            print('Start Update-P', process)
-            done = False
-            while not done:
-                try:
-                    updated_p(process.pk, max(source1_up, source2_up))
-                    time.sleep(1)
-                    up_image_p(process)
-                    done = True
-                except Exception: time.sleep(1)
-            print('End Update-P', process)
-        else:
-            wait_time = 3600  # 更新がないとき 1時間後に再実行
-            print('No Update-P', process, 'Retry after 1 hour')
-        time.sleep(wait_time)
+    if process_up < source1_up or \
+            process_up < source2_up:
+        print('Start Update-P', process)
+        done = False
+        trial = 0
+        while not done:
+            try:
+                updated_p(process.pk, max(source1_up, source2_up))
+                time.sleep(2)
+                up_image_p(process)
+                done = True
+            except Exception as e_p:
+                trial += 1
+                print(f'process {process} trial{trial} Faild \n{e_p}')
+                time.sleep(60)
+        print('End Update-P', process)
 
 
 def checkup():
-    for source in Source.objects.all():
-        t_update = threading.Thread(
-            target=update_source, kwargs={'source': source})
-        t_update.start()
+    wait_time = 3600  # 1時間間隔で再実行
+    while True:
+        for source in Source.objects.all():
+            update_source(source)
 
-    for process in Process.objects.all():
-        t_update_p = threading.Thread(
-            target=update_process, kwargs={'process': process})
-        t_update_p.start()
+        for process in Process.objects.all():
+            update_process(process)
+        time.sleep(wait_time)
 
 
 t_awake = threading.Thread(target=awake)
