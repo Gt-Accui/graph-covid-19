@@ -108,8 +108,5 @@ def checkup():
         time.sleep(wait_time)
 
 
-t_awake = threading.Thread(target=awake)
-t_awake.start()
-
-t_checkup = threading.Thread(target=checkup)
-t_checkup.start()
+threading.Thread(target=awake)  # .start()
+threading.Thread(target=checkup)  # .start()
