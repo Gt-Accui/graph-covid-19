@@ -1,1 +1,1 @@
-web: gunicorn chart.wsgi --log-file - 
+web: gunicorn chart.wsgi --log-file - --workers 1
