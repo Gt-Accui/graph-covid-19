@@ -10,6 +10,20 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/
 import os
 from django.core.wsgi import get_wsgi_application
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chart.settings')
+
+application = get_wsgi_application()
+
+
+def awake():
+    while True:
+        print('Start Awake')
+        try: requests.get("https://graph-covid-19.herokuapp.com/")
+        except Exception as e_awake: print("e_awake", e_awake)
+        print('End Awake')
+        time.sleep(1500)
+
+
 # ↓ awake, checkup用
 import threading
 import requests
@@ -24,20 +38,6 @@ from graph.views_def import csv_str, updated, up_image
 from process.models import Process
 from process.views_def import up_image as up_image_p
 from process.views_def import updated as updated_p
-# ↑ awake, checkup用
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chart.settings')
-
-application = get_wsgi_application()
-
-
-def awake():
-    while True:
-        print('Start Awake')
-        try: requests.get("https://graph-covid-19.herokuapp.com/")
-        except Exception as e_awake: print("e_awake", e_awake)
-        print('End Awake')
-        time.sleep(1500)
 
 
 def update_source(source):
@@ -108,5 +108,8 @@ def checkup():
         time.sleep(wait_time)
 
 
-threading.Thread(target=awake)  # .start()
-threading.Thread(target=checkup)  # .start()
+t_awake = threading.Thread(target=awake)
+t_awake.start()
+
+t_checkup = threading.Thread(target=checkup)
+t_checkup.start()
