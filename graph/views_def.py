@@ -44,7 +44,7 @@ def csv_col_def(source):  # CSVの列ラベルをテーブル'CSVColumn'に保�
     columns = list(df.columns)
 
     for column in columns:  # 数値はY軸、その他はX軸をデフォルトとする
-        if column:
+        if not column.startswith('Unnamed: '):
             col_num = columns.index(column)
             axis = 'Y'
             try: df.iloc[[0], [col_num]].values[0] / 1  # 日付はエラーと判定される
