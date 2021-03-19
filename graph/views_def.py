@@ -44,12 +44,13 @@ def csv_col_def(source):  # CSVの列ラベルをテーブル'CSVColumn'に保�
     columns = list(df.columns)
 
     for column in columns:  # 数値はY軸、その他はX軸をデフォルトとする
-        col_num = columns.index(column)
-        axis = 'Y'
-        try: df.iloc[[0], [col_num]].values[0] / 1  # 日付はエラーと判定される
-        except Exception: axis = 'X'
+        if column:
+            col_num = columns.index(column)
+            axis = 'Y'
+            try: df.iloc[[0], [col_num]].values[0] / 1  # 日付はエラーと判定される
+            except Exception: axis = 'X'
 
-        CSVColumn.objects.update_or_create(
-            source=source, csv_col_num=col_num, csv_col_label=column,
-            defaults={'df_col_label': column, 'axis': axis},
-            )
+            CSVColumn.objects.update_or_create(
+                source=source, csv_col_num=col_num, csv_col_label=column,
+                defaults={'df_col_label': column, 'axis': axis},
+                )
