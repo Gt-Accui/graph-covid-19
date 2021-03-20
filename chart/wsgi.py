@@ -68,8 +68,11 @@ def update_source(source):
                         up_image(source)
                         done = True
                     except Exception as e_s:
+                        if trial >= 5:
+                            print(f'source {source} Faild Exit')
+                            done = True
                         trial += 1
-                        print(f'source {source} trial{trial} Faild \n{e_s}')
+                        print(f'source {source} trial{trial} Faild\n{e_s}')
                         time.sleep(1)
                 print('End Update', source)
             else: print('No Update', source)
