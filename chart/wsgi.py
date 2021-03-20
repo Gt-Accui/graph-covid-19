@@ -54,7 +54,11 @@ def update_source(source):
                 '%a, %d %b %Y %H:%M:%S GMT'
                 ).astimezone(timezone.utc)
             if source_updated < last_modified:
-                csv_data = requests.get(source.url).content.decode('utf-8')
+                try:
+                    csv_data = requests.get(source.url).content.decode('utf-8')
+                except Exception as e_csv_decode_utf8:
+                    print('e_csv_decode_utf8', e_csv_decode_utf8)
+                    csv_data = requests.get(source.url).content.decode('shift_jis')
                 done = False
                 trial = 0
                 while not done:
