@@ -71,9 +71,10 @@ def update_source(source):
                         if trial >= 5:
                             print(f'source {source} Faild Exit')
                             done = True
-                        trial += 1
-                        print(f'source {source} trial{trial} Faild\n{e_s}')
-                        time.sleep(1)
+                        else:
+                            trial += 1
+                            print(f'source {source} trial{trial} Faild\n{e_s}')
+                            time.sleep(1)
                 print('End Update', source)
             else: print('No Update', source)
         else: print('e_res_status', res.status_code, source)
@@ -95,9 +96,13 @@ def update_process(process):
                 up_image_p(process)
                 done = True
             except Exception as e_p:
-                trial += 1
-                print(f'process {process} trial{trial} Faild \n{e_p}')
-                time.sleep(1)
+                if trial >= 5:
+                    print(f'process {process} Faild Exit')
+                    done = True
+                else:
+                    trial += 1
+                    print(f'process {process} trial{trial} Faild \n{e_p}')
+                    time.sleep(1)
         print('End Update-P', process)
     else: print('No Update', process)
 
