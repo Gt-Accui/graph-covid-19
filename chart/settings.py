@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # CSS用
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',  # to 'not DEBUG'
 ]
 
 ROOT_URLCONF = 'chart.urls'
@@ -75,7 +75,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'chart.wsgi.application'
+# to 'not DEBUG'
+# WSGI_APPLICATION = 'chart.wsgi.application'
 
 
 # Database
@@ -147,6 +148,8 @@ try:
 except ImportError: pass
 
 if not DEBUG:
+    WSGI_APPLICATION = 'chart.wsgi.application'
+    MIDDLEWARE += ['whitenoise.middleware.WhiteNoiseMiddleware']  # CSS用
     SECRET_KEY = os.environ['SECRET_KEY']
     import django_heroku
     django_heroku.settings(locals())
