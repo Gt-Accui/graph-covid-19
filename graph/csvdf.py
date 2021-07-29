@@ -3,6 +3,7 @@ from django.db.models import Q
 import io
 
 from .models import CSVColumn, CSVData
+# from copy import deepcopy
 
 
 # ↓ 'CSV登録'で使用
@@ -44,8 +45,8 @@ def csv_to_df(data_col, err_list):
     data_y_csv = data_col.csv_col_label
 
     csv_str = CSVData.objects.get(source=data_source).csv_str
-    data_csv = pd.read_csv(io.StringIO(csv_str))[
-        [data_x_csv, data_y_csv]]
+    df = obj_to_col(pd.read_csv(io.StringIO(csv_str)))
+    data_csv = df[[data_x_csv, data_y_csv]]
 
     data_csvcolumns = CSVColumn.objects.filter(
         Q(source=data_source) & Q(axis='X') |
@@ -88,6 +89,25 @@ def get_csvcolumns(process):
 
 # ↑ 'CSV組合せ'で使用
 # ↓ 共用
+
+
+def obj_to_col(df, col_num=3):
+    df_col = len(df.columns)
+    for i, col in enumerate(df.columns):
+        if not i:
+            df_i = df.set_index(col, drop=False)
+            res = df_i[col].drop_duplicates()
+            df_i = df_i.drop(columns=col)
+            continue
+        if type(df_i[col][0]) == str and df_i[col][0] != '0':
+            groups = df_i.groupby(col, as_index=False)
+            for group in groups.groups:
+                tmp = groups.get_group(group).drop(columns=col)
+                if df_col == col_num: tmp.columns = [group]
+                else: tmp = tmp.add_prefix(group + '_')
+                res = pd.concat([res, tmp], axis=1)
+            return res
+    return df
 
 
 def df_slice(df, rows):  # 一覧表示で使用

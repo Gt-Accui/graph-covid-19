@@ -52,7 +52,7 @@ def update_source(source):
             last_modified = datetime.strptime(
                 res.headers['Last-Modified'],
                 '%a, %d %b %Y %H:%M:%S GMT'
-                ).astimezone(timezone.utc)
+                )  # .astimezone(timezone.utc)
             if source_updated < last_modified:
                 try:
                     csv_data = requests.get(source.url).content.decode('utf-8')

@@ -2,8 +2,7 @@ import pandas as pd
 import io
 
 from .models import Source, CSVData, Image, CSVColumn
-from .plot import plot_image
-
+from .plot import plot_image, obj_to_col
 
 def update_csv(pk, csv):
     Source.objects.update_or_create(
@@ -13,7 +12,7 @@ def update_csv(pk, csv):
 
 def csv_str(source, csv):
     csv_str = ''
-    for line in csv:  # csvを列ごとに取り出し、文字列として結合
+    for line in csv:  # csvを行ごとに取り出し、文字列として結合
         try: line = line.decode(encoding='UTF8')
         except Exception: pass
         csv_str += line
@@ -41,6 +40,7 @@ def up_image(source):
 def csv_col_def(source):  # CSVの列ラベルをテーブル'CSVColumn'に保存
     csv_str = CSVData.objects.get(source=source).csv_str
     df = pd.read_csv(io.StringIO(csv_str))
+    df = obj_to_col(df)
     columns = list(df.columns)
 
     for column in columns:  # 数値はY軸、その他はX軸をデフォルトとする
