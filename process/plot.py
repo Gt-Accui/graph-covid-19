@@ -31,11 +31,18 @@ def update_y_title(fig, process):
         fig.update_layout(
             yaxis=dict(title=f'{process.data1_col}<br>{calc_symbol}  {process.data2_col}'),
             showlegend=False)
-    else:
+    elif calc == '1-axis':
         fig.update_layout(
-            yaxis=dict(showgrid=False),
-            yaxis2=dict(showgrid=False),
+            yaxis=dict(
+                title=f'{process.data1_col}<br>{process.data2_col}',
+                showgrid=False),)
+    elif calc == '2-axis':
+        fig.update_layout(
+            yaxis=dict(title=f'{process.data1_col}', showgrid=False),
+            yaxis2=dict(title=f'{process.data2_col}', showgrid=False),
         )
+    fig.data[0].name = f'{process.data1_col}'
+    fig.data[1].name = f'{process.data2_col}'
 
 
 def set_mode(fig, df1, df2, process):
