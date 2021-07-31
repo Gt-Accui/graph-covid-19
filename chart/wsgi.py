@@ -25,7 +25,8 @@ def awake():
 
 
 # ↓ awake, checkup用
-import threading
+# import threading
+from simple_scheduler.recurring import recurring_scheduler
 import requests
 # ↓ awake用
 import time
@@ -109,21 +110,25 @@ def update_process(process):
 
 
 def checkup():
-    wait_time = 3600  # 1時間間隔で再実行
-    while True:
-        print('Start Checkup')
-        for source in Source.objects.all():
-            update_source(source)
+    # wait_time = 3600  # 1時間間隔で再実行
+    # while True:
+    print('Start Checkup')
+    for source in Source.objects.all():
+        update_source(source)
 
-        for process in Process.objects.all():
-            update_process(process)
-        print('End Checkup')
-        time.sleep(wait_time)
+    for process in Process.objects.all():
+        update_process(process)
+    print('End Checkup')
+    # time.sleep(wait_time)
 
 
 '''
 t_awake = threading.Thread(target=awake)
 t_awake.start()
 '''
-t_checkup = threading.Thread(target=checkup)
-t_checkup.start()
+# t_checkup = threading.Thread(target=checkup)
+# t_checkup.start()
+recurring_scheduler.add_job(target=checkup, period_in_seconds=3600, job_name="checkup")
+recurring_scheduler.job_summary()
+recurring_scheduler.run()
+recurring_scheduler.job_summary()
