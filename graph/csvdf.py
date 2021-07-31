@@ -3,7 +3,6 @@ from django.db.models import Q
 import io
 
 from .models import CSVColumn, CSVData
-# from copy import deepcopy
 
 
 # ↓ 'CSV登録'で使用
@@ -16,7 +15,9 @@ def get_df_labels(csvcolumns, csv):
             csv[csv_col_label][0] / 1
         except Exception:  # エラーなら
             try:  # 日時に変換、上書きしてみるテスト ← try tryの目的
-                csv[csv_col_label] = pd.to_datetime(csv[csv_col_label])
+                # SettingWithCopyWarning 対策 ビューとして機能を確認済み
+                with pd.option_context('mode.chained_assignment', None):
+                    csv[csv_col_label] = pd.to_datetime(csv[csv_col_label])
             except Exception: pass
         df_labels.append(csvcolumn.df_col_label)
 

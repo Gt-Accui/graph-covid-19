@@ -77,7 +77,7 @@ def update_source(source):
                             time.sleep(1)
                 print('End Update', source)
             else: print('No Update', source)
-        else: print('e_res_status', res.status_code, source)
+        else: print('e_res_status', res.status_code, source, res.headers)
 
 
 def update_process(process):

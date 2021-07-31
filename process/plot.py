@@ -41,8 +41,8 @@ def update_y_title(fig, process):
             yaxis=dict(title=f'{process.data1_col}', showgrid=False),
             yaxis2=dict(title=f'{process.data2_col}', showgrid=False),
         )
-    fig.data[0].name = f'{process.data1_col}'
-    fig.data[1].name = f'{process.data2_col}'
+    for data, title in zip(fig.data, [f'{process.data1_col}', f'{process.data2_col}']):
+        data.name = title
 
 
 def set_mode(fig, df1, df2, process):
