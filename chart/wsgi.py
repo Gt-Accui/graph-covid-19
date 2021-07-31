@@ -46,8 +46,9 @@ def update_source(source):
     try: res = requests.head(source.url)
     except Exception as e_res: print('e_res', source, e_res)
     if res:
+        content_type = ['text/csv', 'application/octet-stream']
         if res.status_code == 200 and \
-                res.headers['Content-Type'] == 'text/csv':
+                res.headers['Content-Type'] in content_type:
             source_updated = source.updated_at
             last_modified = datetime.strptime(
                 res.headers['Last-Modified'],
