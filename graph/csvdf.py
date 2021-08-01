@@ -46,7 +46,7 @@ def csv_to_df(data_col, err_list):
     data_y_csv = data_col.csv_col_label
 
     csv_str = CSVData.objects.get(source=data_source).csv_str
-    df = obj_to_col(pd.read_csv(io.StringIO(csv_str)))
+    df = obj_to_col(pd.read_csv(io.StringIO(csv_str), thousands=','))
     data_csv = df[[data_x_csv, data_y_csv]]
 
     data_csvcolumns = CSVColumn.objects.filter(
@@ -100,7 +100,7 @@ def obj_to_col(df, col_num=3):
             res = df_i[col].drop_duplicates()
             df_i = df_i.drop(columns=col)
             continue
-        if type(df_i[col][0]) == str and df_i[col][0] != '0':
+        if type(df_i[col][0]) == str:  # and df_i[col][0] != '0':
             groups = df_i.groupby(col, as_index=False)
             for group in groups.groups:
                 tmp = groups.get_group(group).drop(columns=col)

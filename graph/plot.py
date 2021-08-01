@@ -43,7 +43,7 @@ def plot(source):
 
     csvcolumns = CSVColumn.objects.filter(source=source)
     csv_str = CSVData.objects.get(source=source).csv_str
-    df = pd.read_csv(io.StringIO(csv_str))
+    df = pd.read_csv(io.StringIO(csv_str), thousands=',')
     df = df.T.loc[~df.columns.str.startswith('Unnamed: ')].T
     df = obj_to_col(df)
     df.columns = get_df_labels(csvcolumns, df)
@@ -57,7 +57,7 @@ def plot_image(source):
 
     csvcolumns = CSVColumn.objects.filter(source=source)
     csv_str = CSVData.objects.get(source=source).csv_str
-    df = pd.read_csv(io.StringIO(csv_str))
+    df = pd.read_csv(io.StringIO(csv_str), thousands=',')
     df = df.T.loc[~df.columns.str.startswith('Unnamed: ')].T
     df = obj_to_col(df)
     df.columns = get_df_labels(csvcolumns, df)

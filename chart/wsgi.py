@@ -15,22 +15,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chart.settings')
 application = get_wsgi_application()
 
 
-def awake():
-    while True:
-        print('Start Awake')
-        try: requests.get("https://graph-covid-19.herokuapp.com/")
-        except Exception as e_awake: print("e_awake", e_awake)
-        print('End Awake')
-        time.sleep(1500)
-
-
-# ↓ awake, checkup用
-# import threading
+# checkup用
 from simple_scheduler.recurring import recurring_scheduler
 import requests
-# ↓ awake用
-import time
-# ↓ checkup用
 from datetime import datetime, timezone
 import sys
 sys.path.append('../')
@@ -110,8 +97,6 @@ def update_process(process):
 
 
 def checkup():
-    # wait_time = 3600  # 1時間間隔で再実行
-    # while True:
     print('Start Checkup')
     for source in Source.objects.all():
         update_source(source)
@@ -119,16 +104,9 @@ def checkup():
     for process in Process.objects.all():
         update_process(process)
     print('End Checkup')
-    # time.sleep(wait_time)
 
 
-'''
-t_awake = threading.Thread(target=awake)
-t_awake.start()
-'''
-# t_checkup = threading.Thread(target=checkup)
-# t_checkup.start()
-recurring_scheduler.add_job(target=checkup, period_in_seconds=3600, job_name="checkup")
-recurring_scheduler.job_summary()
+recurring_scheduler.add_job(
+    target=checkup, period_in_seconds=3600, job_name="checkup")
 recurring_scheduler.run()
 recurring_scheduler.job_summary()

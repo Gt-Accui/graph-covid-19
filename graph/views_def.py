@@ -39,7 +39,7 @@ def up_image(source):
 
 def csv_col_def(source):  # CSVの列ラベルをテーブル'CSVColumn'に保存
     csv_str = CSVData.objects.get(source=source).csv_str
-    df = pd.read_csv(io.StringIO(csv_str))
+    df = pd.read_csv(io.StringIO(csv_str), thousands=',')
     df = obj_to_col(df)
     columns = list(df.columns)
 
