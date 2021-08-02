@@ -47,26 +47,32 @@ https://www.mhlw.go.jp/stf/covid-19/open-data.html
 For example, the CSV file is "UTF-8" encoded, contains headers, and has a date as the Key.
 
 # Requirement
-asgiref 3.3.1
-python 3.9.1  
-beautifulsoup4 4.9.3  
-dj-database-url 0.5.0  
-Django 3.1.4  
-django-bootstrap4 2.3.1  
-django-crispy-forms 1.10.0  
-django-filter 2.4.0  
-importlib-metadata 2.1.1  
-numpy 1.19.3  
-pandas 1.1.5  
-python-dateutil 2.8.1  
-plotly 4.14.1  
-pytz 2020.4  
-retrying 1.3.3  
-six 1.15.0  
-soupsieve 2.1  
-sqlparse 0.4.1  
-whitenoise 5.2.0  
-zipp 3.4.0
+asgiref==3.3.1
+beautifulsoup4==4.9.3
+cloudinary==1.24.0
+dj-database-url==0.5.0
+Django==3.1.4
+django-bootstrap4==2.3.1
+django-cloudinary-storage==0.3.0
+django-crispy-forms==1.10.0
+django-filter==2.4.0
+django-heroku==0.3.1
+gunicorn==20.0.4
+importlib-metadata==2.1.1
+kaleido==0.1.0
+numpy==1.19.3
+pandas==1.1.5
+plotly==4.14.1
+psycopg2==2.8.6
+python-dateutil==2.8.1
+pytz==2020.4
+retrying==1.3.3
+simple-scheduler==1.1.11
+six==1.15.0
+soupsieve==2.1
+sqlparse==0.4.1
+whitenoise==5.2.0
+zipp==3.4.0
 
 # License
 "gra-cov-19" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
