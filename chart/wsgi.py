@@ -18,6 +18,7 @@ application = get_wsgi_application()
 # checkup用
 from simple_scheduler.recurring import recurring_scheduler
 import requests
+import time
 from datetime import datetime, timezone
 import sys
 sys.path.append('../')
