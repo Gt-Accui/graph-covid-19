@@ -3,7 +3,6 @@
 
 # DEMO
 ![gra-cov-19](https://user-images.githubusercontent.com/63509152/106367252-8863b200-6384-11eb-8fb0-3c1ecc7c441c.gif)
-- ## [Demo on Heroku](https://graph-covid-19.herokuapp.com/ "gra-cov-19")
 
 # Notice
 I'm sorry.  I am a Japanese who is **not very good at English**.  
